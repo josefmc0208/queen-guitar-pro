@@ -1,0 +1,2144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Queen Guitar Pro - Discografía Completa</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8D48B;
+    --gold-dark: #8B6914;
+    --black: #0A0A0A;
+    --dark: #141414;
+    --dark2: #1A1A1A;
+    --dark3: #222222;
+    --red: #8B0000;
+    --red-light: #C41E3A;
+    --white: #F5F0E8;
+    --gray: #888;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    background: linear-gradient(180deg, var(--dark2) 0%, var(--black) 100%);
+    border-bottom: 2px solid var(--gold-dark);
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .queen-crest {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .queen-crest svg { width: 100%; height: 100%; }
+
+  .header-title h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 2.2em;
+    font-weight: 900;
+    background: linear-gradient(180deg, var(--gold-light) 0%, var(--gold) 50%, var(--gold-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+  }
+
+  .header-title p {
+    font-size: 0.85em;
+    color: var(--gray);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .nav-back {
+    background: none;
+    border: 1px solid var(--gold-dark);
+    color: var(--gold);
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85em;
+    transition: all 0.3s;
+    margin-left: auto;
+  }
+
+  .nav-back:hover {
+    background: var(--gold-dark);
+    color: var(--black);
+  }
+
+  .nav-back.hidden { display: none; }
+
+  /* ===== BREADCRUMB ===== */
+  .breadcrumb {
+    max-width: 1200px;
+    margin: 15px auto 0;
+    padding: 0 20px;
+    font-size: 0.8em;
+    color: var(--gray);
+  }
+
+  .breadcrumb span { cursor: pointer; transition: color 0.3s; }
+  .breadcrumb span:hover { color: var(--gold); }
+  .breadcrumb .sep { margin: 0 8px; color: var(--gold-dark); }
+  .breadcrumb .current { color: var(--gold); cursor: default; }
+
+  /* ===== MAIN CONTENT ===== */
+  .main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 20px;
+  }
+
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.4em;
+    color: var(--gold);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--gold-dark);
+  }
+
+  /* ===== ALBUM GRID ===== */
+  .album-type-section { margin-bottom: 40px; }
+
+  .album-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 25px;
+  }
+
+  .album-card {
+    background: var(--dark2);
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .album-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--gold-dark);
+    box-shadow: 0 10px 30px rgba(201, 168, 76, 0.15);
+  }
+
+  .album-cover {
+    width: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3em;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .album-cover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .album-cover-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    text-align: center;
+  }
+
+  .album-cover-placeholder .vinyl-icon {
+    font-size: 3em;
+    margin-bottom: 8px;
+  }
+
+  .album-cover-placeholder .album-name-cover {
+    font-family: 'Cinzel', serif;
+    font-size: 0.5em;
+    color: var(--white);
+    line-height: 1.2;
+    word-wrap: break-word;
+    padding: 0 5px;
+  }
+
+  .album-info {
+    padding: 12px 15px;
+    background: var(--dark);
+  }
+
+  .album-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.85em;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 4px;
+    line-height: 1.3;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    min-height: 2.6em;
+  }
+
+  .album-year {
+    font-size: 0.8em;
+    color: var(--gold);
+  }
+
+  .album-tracks-count {
+    font-size: 0.75em;
+    color: var(--gray);
+    margin-top: 2px;
+  }
+
+  /* ===== SONG LIST ===== */
+  .album-header-detail {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 30px;
+    align-items: flex-start;
+  }
+
+  .album-header-cover {
+    width: 250px;
+    min-width: 250px;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid var(--gold-dark);
+  }
+
+  .album-header-cover .album-cover-placeholder {
+    font-size: 1.2em;
+  }
+
+  .album-header-info h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 2em;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .album-header-info .album-meta {
+    color: var(--gray);
+    font-size: 0.9em;
+    line-height: 1.8;
+  }
+
+  .album-header-info .album-meta strong { color: var(--gold-light); }
+
+  .song-list { list-style: none; }
+
+  .song-item {
+    display: flex;
+    align-items: center;
+    padding: 14px 20px;
+    border-bottom: 1px solid #1e1e1e;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 4px;
+  }
+
+  .song-item:hover {
+    background: var(--dark2);
+    border-color: var(--gold-dark);
+  }
+
+  .song-number {
+    width: 35px;
+    font-size: 0.85em;
+    color: var(--gray);
+    font-weight: 600;
+  }
+
+  .song-title-text {
+    flex: 1;
+    font-size: 1em;
+    color: var(--white);
+  }
+
+  .song-duration {
+    color: var(--gray);
+    font-size: 0.85em;
+    margin-left: 15px;
+  }
+
+  .song-guitar-icon {
+    margin-left: 15px;
+    color: var(--gold);
+    font-size: 1.1em;
+    opacity: 0.7;
+  }
+
+  /* ===== FULLSCREEN SONG VIEW ===== */
+  .song-view {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--black);
+    z-index: 200;
+    display: none;
+    flex-direction: column;
+  }
+
+  .song-view.active { display: flex; }
+
+  .song-view-header {
+    background: linear-gradient(180deg, var(--dark2) 0%, var(--black) 100%);
+    border-bottom: 2px solid var(--gold-dark);
+    padding: 15px 25px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-shrink: 0;
+  }
+
+  .song-view-close {
+    background: none;
+    border: 1px solid var(--gold-dark);
+    color: var(--gold);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+  }
+
+  .song-view-close:hover {
+    background: var(--gold);
+    color: var(--black);
+  }
+
+  .song-view-title {
+    flex: 1;
+  }
+
+  .song-view-title h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3em;
+    color: var(--gold);
+  }
+
+  .song-view-title p {
+    font-size: 0.8em;
+    color: var(--gray);
+  }
+
+  .song-view-controls {
+    display: flex;
+    gap: 10px;
+  }
+
+  .control-btn {
+    background: var(--dark3);
+    border: 1px solid var(--gold-dark);
+    color: var(--gold);
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82em;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .control-btn:hover {
+    background: var(--gold-dark);
+    color: var(--white);
+  }
+
+  .control-btn.active {
+    background: var(--gold);
+    color: var(--black);
+    border-color: var(--gold);
+  }
+
+  .song-view-body {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+  }
+
+  /* Left sidebar removed - only Cifra Club works in iframe */
+
+  /* === MAIN CONTENT: split chords + backing track === */
+  .sv-main {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+  }
+
+  /* Chord iframe container - crops Cifra Club's right sidebar (ads/videos) */
+  .sv-chords-panel {
+    flex: 1;
+    position: relative;
+    background: #f5f5f5;
+    overflow: hidden;
+  }
+
+  .sv-chords-panel iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(100% + 500px);
+    height: 100%;
+    border: none;
+  }
+
+  .sv-iframe-loading {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--dark);
+    color: var(--gray);
+    gap: 12px;
+    z-index: 2;
+    transition: opacity 0.5s;
+  }
+
+  .sv-iframe-loading.hidden { opacity: 0; pointer-events: none; }
+
+  .sv-iframe-error {
+    display: none;
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--dark);
+    color: var(--gray);
+    gap: 15px;
+    padding: 30px;
+    text-align: center;
+    z-index: 3;
+  }
+
+  .sv-iframe-error.active { display: flex; }
+
+  /* Backing Track panel (right side) */
+  .sv-bt-panel {
+    width: 400px;
+    min-width: 400px;
+    background: var(--dark);
+    border-left: 1px solid var(--gold-dark);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+  }
+
+  .sv-bt-panel.hidden { display: none; }
+
+  .sv-bt-header {
+    padding: 12px 15px;
+    border-bottom: 1px solid #2a2a2a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .sv-bt-header h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85em;
+    color: var(--gold);
+    letter-spacing: 2px;
+  }
+
+  .sv-bt-toggle {
+    background: none;
+    border: 1px solid var(--gold-dark);
+    color: var(--gold);
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+  }
+
+  .sv-bt-toggle:hover { background: var(--gold-dark); color: var(--white); }
+
+  .sv-bt-search {
+    padding: 12px;
+    border-bottom: 1px solid #2a2a2a;
+  }
+
+  .sv-bt-search .sv-yt-input { margin-bottom: 6px; }
+
+  .sv-bt-player {
+    background: #000;
+    padding: 8px;
+  }
+
+  .sv-bt-player iframe {
+    width: 100%;
+    aspect-ratio: 16/9;
+    border: none;
+    border-radius: 4px;
+  }
+
+  .sv-bt-results {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+  }
+
+  .sv-bt-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 15px;
+    text-align: center;
+    color: var(--gray);
+    gap: 12px;
+  }
+
+  .sv-bt-placeholder .bt-icon { font-size: 2.5em; }
+  .sv-bt-placeholder p { font-size: 0.8em; line-height: 1.5; }
+  .sv-bt-placeholder .bt-hint { font-size: 0.7em; color: var(--gold-dark); }
+
+  .sv-iframe-error p { font-size: 0.9em; line-height: 1.5; }
+
+  /* Auto-scroll control */
+  .sv-scroll-control {
+    position: absolute;
+    bottom: 46px;
+    left: 10px;
+    z-index: 11;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(10,10,10,0.92);
+    border: 1px solid var(--gold-dark);
+    border-radius: 20px;
+    padding: 4px 10px;
+  }
+  .sv-scroll-btn {
+    background: var(--gold-dark);
+    color: var(--white);
+    border: none;
+    border-radius: 14px;
+    padding: 4px 12px;
+    font-size: 0.75em;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .sv-scroll-btn:hover { background: var(--gold); color: var(--black); }
+  .sv-scroll-btn.active { background: var(--red-light); color: white; }
+  .sv-scroll-speed-btn {
+    background: var(--dark3);
+    color: var(--gold);
+    border: 1px solid var(--gold-dark);
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    font-size: 0.85em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 0;
+  }
+  .sv-scroll-speed-btn:hover { background: var(--gold-dark); color: var(--black); }
+  .sv-scroll-speed {
+    color: var(--gold-light);
+    font-size: 0.75em;
+    font-weight: 700;
+    min-width: 14px;
+    text-align: center;
+  }
+
+  /* Persistent fallback bar at bottom of chords panel */
+  .sv-chords-fallback {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    background: linear-gradient(0deg, rgba(20,20,20,0.97) 0%, rgba(20,20,20,0.92) 70%, rgba(20,20,20,0) 100%);
+    padding: 18px 16px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .sv-chords-fallback span {
+    color: var(--gold-light);
+    font-size: 0.8em;
+    font-weight: 600;
+    margin-right: 4px;
+  }
+  .sv-fallback-btn {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-size: 0.75em;
+    text-decoration: none;
+    color: var(--white);
+    background: var(--dark3);
+    border: 1px solid var(--gold-dark);
+    transition: all 0.2s;
+  }
+  .sv-fallback-btn:hover { background: var(--gold-dark); color: var(--black); }
+  .sv-fallback-btn.gt { border-color: #ff6600; }
+  .sv-fallback-btn.gt:hover { background: #ff6600; }
+  .sv-fallback-btn.google { border-color: #4285f4; }
+  .sv-fallback-btn.google:hover { background: #4285f4; }
+
+  .sv-open-external {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--gold-dark);
+    color: var(--white);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+    transition: background 0.3s;
+  }
+
+  .sv-open-external:hover { background: var(--gold); color: var(--black); }
+
+  /* Sidebar YouTube mini section */
+  .sv-yt-input {
+    width: 100%;
+    background: var(--dark3);
+    border: 1px solid #333;
+    color: var(--white);
+    padding: 6px 8px;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75em;
+    margin-bottom: 6px;
+  }
+
+  .sv-yt-input:focus { outline: none; border-color: var(--gold); }
+
+  .sv-yt-btn {
+    width: 100%;
+    background: var(--dark3);
+    border: 1px solid var(--gold-dark);
+    color: var(--gold);
+    padding: 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72em;
+    transition: all 0.3s;
+    margin-bottom: 4px;
+  }
+
+  .sv-yt-btn:hover { background: var(--gold-dark); color: var(--white); }
+  .sv-yt-btn.red { background: #CC0000; border-color: #CC0000; color: white; }
+  .sv-yt-btn.red:hover { background: #FF0000; }
+
+  /* Old YouTube panel and lyrics styles removed - now using sidebar + iframe layout */
+
+  /* ===== SEARCH BAR ===== */
+  .search-container {
+    margin-bottom: 25px;
+  }
+
+  .search-input {
+    width: 100%;
+    max-width: 500px;
+    background: var(--dark2);
+    border: 1px solid #333;
+    color: var(--white);
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95em;
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 15px rgba(201, 168, 76, 0.1);
+  }
+
+  .search-input::placeholder { color: #555; }
+
+  /* ===== EXTERNAL LINKS ===== */
+  .external-links {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+  }
+
+  .ext-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--dark3);
+    border: 1px solid #333;
+    color: var(--gold);
+    padding: 8px 14px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 0.8em;
+    transition: all 0.3s;
+  }
+
+  .ext-link:hover {
+    border-color: var(--gold);
+    background: var(--gold-dark);
+    color: var(--white);
+  }
+
+  /* ===== LOADING OVERLAY ===== */
+  .loading-chords {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--gray);
+  }
+
+  .loading-chords .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--dark3);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ===== SCROLL BAR ===== */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--dark); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .album-header-detail { flex-direction: column; align-items: center; text-align: center; }
+    .album-header-cover { width: 200px; min-width: 200px; }
+    .sv-bt-panel { width: 300px; min-width: 300px; }
+    .song-view-controls { flex-wrap: wrap; }
+    .header-title h1 { font-size: 1.5em; }
+    .album-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  }
+
+  @media (max-width: 600px) {
+    .header-content { flex-wrap: wrap; }
+    .queen-crest { width: 50px; height: 50px; }
+    .header-title h1 { font-size: 1.2em; letter-spacing: 3px; }
+    .album-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; }
+    .song-view-header { padding: 10px 15px; flex-wrap: wrap; }
+  }
+
+  /* ===== INTRO ANIMATION ===== */
+  .fade-in { animation: fadeIn 0.4s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Tuning info box */
+  .tuning-info {
+    background: var(--dark2);
+    border: 1px solid var(--gold-dark);
+    border-radius: 8px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .tuning-info .icon { font-size: 1.5em; }
+  .tuning-info .text { font-size: 0.85em; color: var(--gray); line-height: 1.5; }
+  .tuning-info .text strong { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-content">
+    <div class="queen-crest">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="goldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#E8D48B"/>
+            <stop offset="50%" style="stop-color:#C9A84C"/>
+            <stop offset="100%" style="stop-color:#8B6914"/>
+          </linearGradient>
+        </defs>
+        <!-- Crown -->
+        <path d="M50 8 L62 28 L78 12 L72 35 L92 25 L78 45 L50 38 L22 45 L8 25 L28 35 L22 12 L38 28 Z" fill="url(#goldGrad)" stroke="#8B6914" stroke-width="1"/>
+        <!-- Shield -->
+        <path d="M25 45 L75 45 L75 72 Q75 90 50 95 Q25 90 25 72 Z" fill="none" stroke="url(#goldGrad)" stroke-width="2.5"/>
+        <!-- Q letter -->
+        <text x="50" y="78" text-anchor="middle" font-family="Cinzel, serif" font-size="32" font-weight="900" fill="url(#goldGrad)">Q</text>
+        <!-- Lions -->
+        <text x="14" y="72" font-size="18">🦁</text>
+        <text x="72" y="72" font-size="18">🦁</text>
+      </svg>
+    </div>
+    <div class="header-title">
+      <h1>Queen</h1>
+      <p>Guitar Pro - Discografía</p>
+    </div>
+    <button class="nav-back hidden" id="navBack" onclick="goBack()">← Volver</button>
+  </div>
+  <div class="breadcrumb" id="breadcrumb">
+    <span class="current">Discografía</span>
+  </div>
+</div>
+
+<div class="main" id="mainContent"></div>
+
+<!-- Fullscreen Song View -->
+<div class="song-view" id="songView">
+  <div class="song-view-header">
+    <button class="song-view-close" onclick="closeSongView()">✕</button>
+    <div class="song-view-title">
+      <h2 id="svTitle"></h2>
+      <p id="svAlbum"></p>
+    </div>
+    <a id="svExternalLink" href="#" target="_blank" class="control-btn" title="Abrir acordes en Cifra Club">🎶 Cifra Club ↗</a>
+    <a id="svGuitarTunaBtn" href="#" onclick="event.preventDefault(); openChordsInGuitarTuna(this.href);" class="control-btn" title="Abrir acordes en GuitarTuna" style="margin-left:4px; background:var(--dark3); font-size:0.75em;">🎵 GuitarTuna ↗</a>
+  </div>
+  <div class="song-view-body">
+    <!-- MAIN AREA: chords (Cifra Club) + backing track panel -->
+    <div class="sv-main" id="svMain">
+      <!-- CHORDS PANEL (iframe, cropped to hide Cifra Club's right sidebar) -->
+      <div class="sv-chords-panel" id="svChordsPanel">
+        <div class="sv-iframe-loading" id="svLoading">
+          <div class="spinner"></div>
+          <p>Cargando acordes...</p>
+        </div>
+        <iframe id="svIframe" sandbox="allow-scripts allow-forms" loading="eager"></iframe>
+        <div class="sv-iframe-error" id="svIframeError">
+          <p style="font-size:1.5em;">🎸</p>
+          <p>No se encontraron los acordes en Cifra Club.</p>
+          <p style="margin-top:12px;">Prueba en otra fuente:</p>
+          <a id="svGuitarTunaLink" href="#" onclick="event.preventDefault(); openChordsInGuitarTuna(this.href);" class="sv-yt-btn red" style="display:inline-block; margin-top:8px; padding:10px 20px; text-decoration:none; font-size:0.9em; cursor:pointer;">🎵 Abrir en GuitarTuna</a>
+          <a id="svGuitarTunaSearch" href="#" target="_blank" class="sv-yt-btn" style="display:inline-block; margin-top:6px; padding:8px 16px; text-decoration:none; font-size:0.8em;">🔍 Buscar en Google → GuitarTuna</a>
+        </div>
+        <!-- Auto-scroll control bar -->
+        <div class="sv-scroll-control" id="svScrollControl">
+          <button class="sv-scroll-btn" id="svScrollToggle" onclick="toggleAutoScroll()" title="Iniciar/pausar auto-scroll">▶ Scroll</button>
+          <button class="sv-scroll-speed-btn" onclick="changeScrollSpeed(-1)" title="Más lento">−</button>
+          <span class="sv-scroll-speed" id="svScrollSpeed">3</span>
+          <button class="sv-scroll-speed-btn" onclick="changeScrollSpeed(1)" title="Más rápido">+</button>
+        </div>
+        <!-- Persistent fallback bar - always visible at bottom of chords panel -->
+        <div class="sv-chords-fallback" id="svChordsFallback">
+          <span>¿No se ven los acordes?</span>
+          <a id="svFallbackCifra" href="#" target="_blank" class="sv-fallback-btn">Cifra Club ↗</a>
+          <a id="svFallbackGT" href="#" onclick="event.preventDefault(); openChordsInGuitarTuna(this.href);" class="sv-fallback-btn gt">GuitarTuna ↗</a>
+          <a id="svFallbackGoogle" href="#" target="_blank" class="sv-fallback-btn google">Google ↗</a>
+        </div>
+      </div>
+      <!-- BACKING TRACK PANEL (right side) -->
+      <div class="sv-bt-panel" id="svBtPanel">
+        <div class="sv-bt-header">
+          <h3>🎸 BACKING TRACK</h3>
+          <button class="sv-bt-toggle" onclick="toggleBtPanel()" title="Ocultar/mostrar panel">◀</button>
+        </div>
+        <div class="sv-bt-search">
+          <input type="text" class="sv-yt-input" id="btSearchInput" placeholder="Buscar backing track...">
+          <div style="display:flex; gap:4px;">
+            <button class="sv-yt-btn" onclick="searchBackingTrack()" style="flex:1;">🔍 Buscar</button>
+            <button class="sv-yt-btn" onclick="toggleBtUrlInput()" style="flex:1;">📋 Pegar URL</button>
+          </div>
+          <div id="btUrlSection" style="display:none; margin-top:6px;">
+            <input type="text" class="sv-yt-input" id="btVideoUrl" placeholder="Pega URL de YouTube..." onkeydown="if(event.key==='Enter')loadBackingTrack()">
+            <button class="sv-yt-btn red" onclick="loadBackingTrack()">▶ Reproducir</button>
+          </div>
+        </div>
+        <div id="btPlayer" style="display:none; padding:10px 12px; border-bottom:1px solid #2a2a2a; text-align:center;">
+          <span id="btNowPlaying" style="font-size:0.78em; color:var(--gold);"></span>
+        </div>
+        <div class="sv-bt-results" id="btResults">
+          <div class="sv-bt-placeholder">
+            <div class="bt-icon">🎵</div>
+            <p>Busca una backing track sin guitarra para practicar junto con los acordes</p>
+            <p class="bt-hint">Haz clic en "Buscar" para encontrar backing tracks en YouTube, luego pega la URL del vídeo que elijas</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== QUEEN COMPLETE DISCOGRAPHY DATA =====
+const DISCOGRAPHY = {
+  studio: [
+    {
+      id: "queen-1973",
+      name: "Queen",
+      year: 1973,
+      color: "#2C1810",
+      gradient: "linear-gradient(135deg, #2C1810 0%, #4A2520 50%, #1a0e08 100%)",
+      tracks: [
+        { title: "Keep Yourself Alive", duration: "3:47" },
+        { title: "Doing All Right", duration: "4:09" },
+        { title: "Great King Rat", duration: "6:04" },
+        { title: "My Fairy King", duration: "4:08" },
+        { title: "Liar", duration: "6:26" },
+        { title: "The Night Comes Down", duration: "4:23" },
+        { title: "Modern Times Rock 'n' Roll", duration: "1:48" },
+        { title: "Son and Daughter", duration: "3:21" },
+        { title: "Jesus", duration: "3:44" },
+        { title: "Seven Seas of Rhye... (Instrumental)", duration: "1:15" }
+      ]
+    },
+    {
+      id: "queen-ii-1974",
+      name: "Queen II",
+      year: 1974,
+      color: "#1a1a2e",
+      gradient: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f1e 100%)",
+      tracks: [
+        { title: "Procession", duration: "1:12" },
+        { title: "Father to Son", duration: "6:14" },
+        { title: "White Queen (As It Began)", duration: "4:34" },
+        { title: "Some Day One Day", duration: "4:22" },
+        { title: "The Loser in the End", duration: "4:01" },
+        { title: "Ogre Battle", duration: "4:04" },
+        { title: "The Fairy Feller's Master-Stroke", duration: "2:40" },
+        { title: "Nevermore", duration: "1:17" },
+        { title: "The March of the Black Queen", duration: "6:34" },
+        { title: "Funny How Love Is", duration: "2:50" },
+        { title: "Seven Seas of Rhye", duration: "2:48" }
+      ]
+    },
+    {
+      id: "sheer-heart-attack-1974",
+      name: "Sheer Heart Attack",
+      year: 1974,
+      color: "#3d0c0c",
+      gradient: "linear-gradient(135deg, #3d0c0c 0%, #5a1a1a 50%, #2a0808 100%)",
+      tracks: [
+        { title: "Brighton Rock", duration: "5:08" },
+        { title: "Killer Queen", duration: "2:57" },
+        { title: "Tenement Funster", duration: "2:49" },
+        { title: "Flick of the Wrist", duration: "3:19" },
+        { title: "Lily of the Valley", duration: "1:42" },
+        { title: "Now I'm Here", duration: "4:15" },
+        { title: "In the Lap of the Gods", duration: "3:22" },
+        { title: "Stone Cold Crazy", duration: "2:15" },
+        { title: "Dear Friends", duration: "1:07" },
+        { title: "Misfire", duration: "1:50" },
+        { title: "Bring Back That Leroy Brown", duration: "2:15" },
+        { title: "She Makes Me (Stormtrooper in Stilettoes)", duration: "4:08" },
+        { title: "In the Lap of the Gods... Revisited", duration: "3:44" }
+      ]
+    },
+    {
+      id: "a-night-at-the-opera-1975",
+      name: "A Night at the Opera",
+      year: 1975,
+      color: "#1a1a1a",
+      gradient: "linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 50%, #0a0a0a 100%)",
+      tracks: [
+        { title: "Death on Two Legs (Dedicated to...)", duration: "3:43" },
+        { title: "Lazing on a Sunday Afternoon", duration: "1:07" },
+        { title: "I'm in Love with My Car", duration: "3:05" },
+        { title: "You're My Best Friend", duration: "2:50" },
+        { title: "'39", duration: "3:30" },
+        { title: "Sweet Lady", duration: "4:01" },
+        { title: "Seaside Rendezvous", duration: "2:13" },
+        { title: "The Prophet's Song", duration: "8:21" },
+        { title: "Love of My Life", duration: "3:39" },
+        { title: "Good Company", duration: "3:23" },
+        { title: "Bohemian Rhapsody", duration: "5:55" },
+        { title: "God Save the Queen", duration: "1:11" }
+      ]
+    },
+    {
+      id: "a-day-at-the-races-1976",
+      name: "A Day at the Races",
+      year: 1976,
+      color: "#1a1a1a",
+      gradient: "linear-gradient(135deg, #222 0%, #111 50%, #000 100%)",
+      tracks: [
+        { title: "Tie Your Mother Down", duration: "4:49" },
+        { title: "You Take My Breath Away", duration: "5:09" },
+        { title: "Long Away", duration: "3:34" },
+        { title: "The Millionaire Waltz", duration: "4:54" },
+        { title: "You and I", duration: "3:26" },
+        { title: "Somebody to Love", duration: "4:56" },
+        { title: "White Man", duration: "4:59" },
+        { title: "Good Old-Fashioned Lover Boy", duration: "2:54" },
+        { title: "Drowse", duration: "3:45" },
+        { title: "Teo Torriatte (Let Us Cling Together)", duration: "5:52" }
+      ]
+    },
+    {
+      id: "news-of-the-world-1977",
+      name: "News of the World",
+      year: 1977,
+      color: "#2d2d3d",
+      gradient: "linear-gradient(135deg, #2d2d3d 0%, #1e1e2e 50%, #141420 100%)",
+      tracks: [
+        { title: "We Will Rock You", duration: "2:01" },
+        { title: "We Are the Champions", duration: "2:59" },
+        { title: "Sheer Heart Attack", duration: "3:26" },
+        { title: "All Dead, All Dead", duration: "3:10" },
+        { title: "Spread Your Wings", duration: "4:34" },
+        { title: "Fight from the Inside", duration: "3:03" },
+        { title: "Get Down, Make Love", duration: "3:51" },
+        { title: "Sleeping on the Sidewalk", duration: "3:06" },
+        { title: "Who Needs You", duration: "3:05" },
+        { title: "It's Late", duration: "6:26" },
+        { title: "My Melancholy Blues", duration: "3:29" }
+      ]
+    },
+    {
+      id: "jazz-1978",
+      name: "Jazz",
+      year: 1978,
+      color: "#1a2d1a",
+      gradient: "linear-gradient(135deg, #1a2d1a 0%, #0d1f0d 50%, #0a150a 100%)",
+      tracks: [
+        { title: "Mustapha", duration: "3:01" },
+        { title: "Fat Bottomed Girls", duration: "4:16" },
+        { title: "Jealousy", duration: "3:14" },
+        { title: "Bicycle Race", duration: "3:01" },
+        { title: "If You Can't Beat Them", duration: "4:15" },
+        { title: "Let Me Entertain You", duration: "3:01" },
+        { title: "Dead on Time", duration: "3:23" },
+        { title: "In Only Seven Days", duration: "2:30" },
+        { title: "Dreamer's Ball", duration: "3:30" },
+        { title: "Fun It", duration: "3:29" },
+        { title: "Leaving Home Ain't Easy", duration: "3:15" },
+        { title: "Don't Stop Me Now", duration: "3:29" },
+        { title: "More of That Jazz", duration: "4:16" }
+      ]
+    },
+    {
+      id: "the-game-1980",
+      name: "The Game",
+      year: 1980,
+      color: "#1a1a2e",
+      gradient: "linear-gradient(135deg, #2a2a3e 0%, #1a1a2e 50%, #0e0e1e 100%)",
+      tracks: [
+        { title: "Play the Game", duration: "3:30" },
+        { title: "Dragon Attack", duration: "4:18" },
+        { title: "Another One Bites the Dust", duration: "3:35" },
+        { title: "Need Your Loving Tonight", duration: "2:50" },
+        { title: "Crazy Little Thing Called Love", duration: "2:42" },
+        { title: "Rock It (Prime Jive)", duration: "4:33" },
+        { title: "Don't Try Suicide", duration: "3:43" },
+        { title: "Sail Away Sweet Sister", duration: "3:33" },
+        { title: "Coming Soon", duration: "2:51" },
+        { title: "Save Me", duration: "3:48" }
+      ]
+    },
+    {
+      id: "flash-gordon-1980",
+      name: "Flash Gordon",
+      year: 1980,
+      color: "#3d2200",
+      gradient: "linear-gradient(135deg, #3d2200 0%, #5a3300 50%, #2a1700 100%)",
+      tracks: [
+        { title: "Flash's Theme", duration: "3:30" },
+        { title: "In the Space Capsule (The Love Theme)", duration: "2:42" },
+        { title: "Ming's Theme (In the Court of Ming the Merciless)", duration: "2:54" },
+        { title: "The Ring (Hypnotic Seduction of Dale)", duration: "0:57" },
+        { title: "Football Fight", duration: "1:27" },
+        { title: "In the Death Cell (Love Theme Reprise)", duration: "2:22" },
+        { title: "Execution of Flash", duration: "1:05" },
+        { title: "The Kiss (Aura Resurrects Flash)", duration: "1:44" },
+        { title: "Arboria (Planet of the Tree Men)", duration: "1:37" },
+        { title: "Escape from the Swamp", duration: "1:44" },
+        { title: "Flash to the Rescue", duration: "2:44" },
+        { title: "Vultan's Theme (Attack of the Hawk Men)", duration: "1:13" },
+        { title: "Battle Theme", duration: "2:18" },
+        { title: "The Wedding March", duration: "0:57" },
+        { title: "Marriage of Dale and Ming (and Flash Approaching)", duration: "2:03" },
+        { title: "Crash Dive on Mingo City", duration: "1:01" },
+        { title: "Flash's Theme Reprise (Victory Celebrations)", duration: "1:23" },
+        { title: "The Hero", duration: "3:31" }
+      ]
+    },
+    {
+      id: "hot-space-1982",
+      name: "Hot Space",
+      year: 1982,
+      color: "#2e1a2e",
+      gradient: "linear-gradient(135deg, #3e2a3e 0%, #2e1a2e 50%, #1e0e1e 100%)",
+      tracks: [
+        { title: "Staying Power", duration: "4:12" },
+        { title: "Dancer", duration: "3:48" },
+        { title: "Back Chat", duration: "4:34" },
+        { title: "Body Language", duration: "4:32" },
+        { title: "Action This Day", duration: "3:33" },
+        { title: "Put Out the Fire", duration: "3:19" },
+        { title: "Life Is Real (Song for Lennon)", duration: "3:31" },
+        { title: "Calling All Girls", duration: "3:53" },
+        { title: "Las Palabras de Amor (The Words of Love)", duration: "4:30" },
+        { title: "Cool Cat", duration: "3:29" },
+        { title: "Under Pressure", duration: "4:08" }
+      ]
+    },
+    {
+      id: "the-works-1984",
+      name: "The Works",
+      year: 1984,
+      color: "#2e2e1a",
+      gradient: "linear-gradient(135deg, #3e3e2a 0%, #2e2e1a 50%, #1e1e0e 100%)",
+      tracks: [
+        { title: "Radio Ga Ga", duration: "5:43" },
+        { title: "Tear It Up", duration: "3:28" },
+        { title: "It's a Hard Life", duration: "4:08" },
+        { title: "Man on the Prowl", duration: "3:28" },
+        { title: "Machines (or 'Back to Humans')", duration: "5:10" },
+        { title: "I Want to Break Free", duration: "4:18" },
+        { title: "Keep Passing the Open Windows", duration: "5:21" },
+        { title: "Hammer to Fall", duration: "4:28" },
+        { title: "Is This the World We Created...?", duration: "2:16" }
+      ]
+    },
+    {
+      id: "a-kind-of-magic-1986",
+      name: "A Kind of Magic",
+      year: 1986,
+      color: "#1a2e2e",
+      gradient: "linear-gradient(135deg, #1a2e2e 0%, #0d1f1f 50%, #0a1515 100%)",
+      tracks: [
+        { title: "One Vision", duration: "5:11" },
+        { title: "A Kind of Magic", duration: "4:24" },
+        { title: "One Year of Love", duration: "4:26" },
+        { title: "Pain Is So Close to Pleasure", duration: "4:21" },
+        { title: "Friends Will Be Friends", duration: "4:07" },
+        { title: "Who Wants to Live Forever", duration: "5:15" },
+        { title: "Gimme the Prize (Kurgan's Theme)", duration: "4:32" },
+        { title: "Don't Lose Your Head", duration: "4:38" },
+        { title: "Princes of the Universe", duration: "3:32" }
+      ]
+    },
+    {
+      id: "the-miracle-1989",
+      name: "The Miracle",
+      year: 1989,
+      color: "#2e1a1a",
+      gradient: "linear-gradient(135deg, #3e2a2a 0%, #2e1a1a 50%, #1e0e0e 100%)",
+      tracks: [
+        { title: "Party", duration: "2:24" },
+        { title: "Khashoggi's Ship", duration: "2:47" },
+        { title: "The Miracle", duration: "5:02" },
+        { title: "I Want It All", duration: "4:41" },
+        { title: "The Invisible Man", duration: "3:55" },
+        { title: "Breakthru", duration: "4:07" },
+        { title: "Rain Must Fall", duration: "4:20" },
+        { title: "Scandal", duration: "4:42" },
+        { title: "My Baby Does Me", duration: "3:22" },
+        { title: "Was It All Worth It", duration: "5:48" }
+      ]
+    },
+    {
+      id: "innuendo-1991",
+      name: "Innuendo",
+      year: 1991,
+      color: "#2d1a00",
+      gradient: "linear-gradient(135deg, #3d2a10 0%, #2d1a00 50%, #1d0e00 100%)",
+      tracks: [
+        { title: "Innuendo", duration: "6:30" },
+        { title: "I'm Going Slightly Mad", duration: "4:22" },
+        { title: "Headlong", duration: "4:38" },
+        { title: "I Can't Live with You", duration: "4:33" },
+        { title: "Don't Try So Hard", duration: "3:39" },
+        { title: "Ride the Wild Wind", duration: "4:42" },
+        { title: "All God's People", duration: "4:21" },
+        { title: "These Are the Days of Our Lives", duration: "4:15" },
+        { title: "Delilah", duration: "3:21" },
+        { title: "The Hitman", duration: "4:56" },
+        { title: "Bijou", duration: "3:36" },
+        { title: "The Show Must Go On", duration: "4:31" }
+      ]
+    },
+    {
+      id: "made-in-heaven-1995",
+      name: "Made in Heaven",
+      year: 1995,
+      color: "#1a1a3d",
+      gradient: "linear-gradient(135deg, #2a2a4d 0%, #1a1a3d 50%, #0e0e2d 100%)",
+      tracks: [
+        { title: "It's a Beautiful Day", duration: "2:32" },
+        { title: "Made in Heaven", duration: "5:25" },
+        { title: "Let Me Live", duration: "4:45" },
+        { title: "Mother Love", duration: "4:49" },
+        { title: "My Life Has Been Saved", duration: "3:15" },
+        { title: "I Was Born to Love You", duration: "4:49" },
+        { title: "Heaven for Everyone", duration: "4:51" },
+        { title: "Too Much Love Will Kill You", duration: "4:20" },
+        { title: "You Don't Fool Me", duration: "5:24" },
+        { title: "A Winter's Tale", duration: "3:49" },
+        { title: "It's a Beautiful Day (Reprise)", duration: "3:01" },
+        { title: "Yeah", duration: "0:17" },
+        { title: "Track 13 (Untitled)", duration: "22:32" }
+      ]
+    }
+  ],
+  live: [
+    {
+      id: "live-killers-1979",
+      name: "Live Killers",
+      year: 1979,
+      color: "#3d0c0c",
+      gradient: "linear-gradient(135deg, #4a1010 0%, #3d0c0c 50%, #280505 100%)",
+      tracks: [
+        { title: "We Will Rock You (Fast)", duration: "3:35" },
+        { title: "Let Me Entertain You", duration: "3:14" },
+        { title: "Death on Two Legs", duration: "3:32" },
+        { title: "Killer Queen", duration: "2:04" },
+        { title: "Bicycle Race", duration: "1:38" },
+        { title: "I'm in Love with My Car", duration: "2:04" },
+        { title: "Get Down, Make Love", duration: "4:33" },
+        { title: "You're My Best Friend", duration: "2:09" },
+        { title: "Now I'm Here", duration: "8:30" },
+        { title: "Dreamer's Ball", duration: "3:52" },
+        { title: "Love of My Life", duration: "3:37" },
+        { title: "'39", duration: "3:29" },
+        { title: "Keep Yourself Alive", duration: "4:05" },
+        { title: "Don't Stop Me Now", duration: "4:30" },
+        { title: "Spread Your Wings", duration: "5:23" },
+        { title: "Brighton Rock", duration: "12:07" },
+        { title: "Bohemian Rhapsody", duration: "5:38" },
+        { title: "Tie Your Mother Down", duration: "3:44" },
+        { title: "Sheer Heart Attack", duration: "3:33" },
+        { title: "We Will Rock You", duration: "2:45" },
+        { title: "We Are the Champions", duration: "3:41" },
+        { title: "God Save the Queen", duration: "1:52" }
+      ]
+    },
+    {
+      id: "live-magic-1986",
+      name: "Live Magic",
+      year: 1986,
+      color: "#2e2e00",
+      gradient: "linear-gradient(135deg, #3e3e10 0%, #2e2e00 50%, #1e1e00 100%)",
+      tracks: [
+        { title: "One Vision", duration: "2:45" },
+        { title: "Tie Your Mother Down", duration: "3:30" },
+        { title: "Seven Seas of Rhye", duration: "1:10" },
+        { title: "A Kind of Magic", duration: "5:25" },
+        { title: "Under Pressure", duration: "3:56" },
+        { title: "Another One Bites the Dust", duration: "4:03" },
+        { title: "I Want to Break Free", duration: "3:18" },
+        { title: "Is This the World We Created...?", duration: "2:48" },
+        { title: "Bohemian Rhapsody", duration: "5:35" },
+        { title: "Hammer to Fall", duration: "5:13" },
+        { title: "Radio Ga Ga", duration: "5:48" },
+        { title: "We Will Rock You", duration: "2:22" },
+        { title: "Friends Will Be Friends", duration: "3:10" },
+        { title: "We Are the Champions", duration: "3:37" },
+        { title: "God Save the Queen", duration: "1:30" }
+      ]
+    },
+    {
+      id: "live-at-wembley-1992",
+      name: "Live at Wembley '86",
+      year: 1992,
+      color: "#00002e",
+      gradient: "linear-gradient(135deg, #10103e 0%, #00002e 50%, #00001e 100%)",
+      tracks: [
+        { title: "One Vision", duration: "6:03" },
+        { title: "Tie Your Mother Down", duration: "4:09" },
+        { title: "In the Lap of the Gods... Revisited", duration: "2:22" },
+        { title: "Seven Seas of Rhye", duration: "1:15" },
+        { title: "Tear It Up", duration: "2:48" },
+        { title: "A Kind of Magic", duration: "5:36" },
+        { title: "Under Pressure", duration: "4:12" },
+        { title: "Another One Bites the Dust", duration: "4:34" },
+        { title: "Who Wants to Live Forever", duration: "3:36" },
+        { title: "I Want to Break Free", duration: "3:39" },
+        { title: "Impromptu", duration: "2:10" },
+        { title: "Brighton Rock Solo", duration: "7:26" },
+        { title: "Now I'm Here", duration: "5:13" },
+        { title: "Love of My Life", duration: "4:13" },
+        { title: "Is This the World We Created...?", duration: "2:25" },
+        { title: "(You're So Square) Baby I Don't Care", duration: "1:39" },
+        { title: "Hello Mary Lou (Goodbye Heart)", duration: "1:18" },
+        { title: "Tutti Frutti", duration: "0:23" },
+        { title: "Gimme Some Lovin'", duration: "0:32" },
+        { title: "Bohemian Rhapsody", duration: "5:28" },
+        { title: "Hammer to Fall", duration: "5:30" },
+        { title: "Crazy Little Thing Called Love", duration: "4:56" },
+        { title: "Big Spender", duration: "1:03" },
+        { title: "Radio Ga Ga", duration: "6:12" },
+        { title: "We Will Rock You", duration: "3:05" },
+        { title: "Friends Will Be Friends", duration: "3:34" },
+        { title: "We Are the Champions", duration: "3:55" },
+        { title: "God Save the Queen", duration: "1:42" }
+      ]
+    },
+    {
+      id: "queen-on-fire-2004",
+      name: "Queen on Fire - Live at the Bowl",
+      year: 2004,
+      color: "#3d1a00",
+      gradient: "linear-gradient(135deg, #4d2a10 0%, #3d1a00 50%, #2d0e00 100%)",
+      tracks: [
+        { title: "Flash", duration: "1:47" },
+        { title: "The Hero", duration: "1:47" },
+        { title: "We Will Rock You (Fast)", duration: "2:37" },
+        { title: "Action This Day", duration: "3:48" },
+        { title: "Play the Game", duration: "4:18" },
+        { title: "Somebody to Love", duration: "6:58" },
+        { title: "Now I'm Here", duration: "5:22" },
+        { title: "Dragon Attack", duration: "3:55" },
+        { title: "Now I'm Here (Reprise)", duration: "2:03" },
+        { title: "Love of My Life", duration: "4:17" },
+        { title: "Save Me", duration: "4:32" },
+        { title: "Back Chat", duration: "4:40" },
+        { title: "Get Down, Make Love", duration: "4:45" },
+        { title: "Guitar Solo", duration: "6:48" },
+        { title: "Under Pressure", duration: "3:44" },
+        { title: "Fat Bottomed Girls", duration: "5:16" },
+        { title: "Crazy Little Thing Called Love", duration: "4:42" },
+        { title: "Bohemian Rhapsody", duration: "5:10" },
+        { title: "Tie Your Mother Down", duration: "4:24" },
+        { title: "Another One Bites the Dust", duration: "4:04" },
+        { title: "Sheer Heart Attack", duration: "3:37" },
+        { title: "We Will Rock You", duration: "2:44" },
+        { title: "We Are the Champions", duration: "3:26" },
+        { title: "God Save the Queen", duration: "1:49" }
+      ]
+    },
+    {
+      id: "queen-rock-montreal-2007",
+      name: "Queen Rock Montreal",
+      year: 2007,
+      color: "#2e002e",
+      gradient: "linear-gradient(135deg, #3e103e 0%, #2e002e 50%, #1e001e 100%)",
+      tracks: [
+        { title: "Intro", duration: "0:35" },
+        { title: "We Will Rock You (Fast)", duration: "2:38" },
+        { title: "Let Me Entertain You", duration: "3:08" },
+        { title: "Play the Game", duration: "4:26" },
+        { title: "Somebody to Love", duration: "7:12" },
+        { title: "Killer Queen", duration: "1:37" },
+        { title: "I'm in Love with My Car", duration: "2:03" },
+        { title: "Get Down, Make Love", duration: "4:50" },
+        { title: "Save Me", duration: "4:39" },
+        { title: "Now I'm Here", duration: "5:28" },
+        { title: "Dragon Attack", duration: "3:47" },
+        { title: "Now I'm Here (Reprise)", duration: "1:47" },
+        { title: "Love of My Life", duration: "3:55" },
+        { title: "Under Pressure", duration: "3:37" },
+        { title: "Keep Yourself Alive", duration: "4:01" },
+        { title: "Drum & Timpani Solo", duration: "3:51" },
+        { title: "Guitar Solo", duration: "4:41" },
+        { title: "Crazy Little Thing Called Love", duration: "4:23" },
+        { title: "Jailhouse Rock", duration: "2:14" },
+        { title: "Bohemian Rhapsody", duration: "5:21" },
+        { title: "Tie Your Mother Down", duration: "4:38" },
+        { title: "Another One Bites the Dust", duration: "3:54" },
+        { title: "Sheer Heart Attack", duration: "3:40" },
+        { title: "We Will Rock You", duration: "2:33" },
+        { title: "We Are the Champions", duration: "3:33" },
+        { title: "God Save the Queen", duration: "1:47" }
+      ]
+    },
+    {
+      id: "hungarian-rhapsody-2012",
+      name: "Hungarian Rhapsody: Live in Budapest",
+      year: 2012,
+      color: "#002e00",
+      gradient: "linear-gradient(135deg, #103e10 0%, #002e00 50%, #001e00 100%)",
+      tracks: [
+        { title: "One Vision", duration: "5:52" },
+        { title: "Tie Your Mother Down", duration: "3:48" },
+        { title: "In the Lap of the Gods... Revisited", duration: "2:26" },
+        { title: "Seven Seas of Rhye", duration: "1:09" },
+        { title: "Tear It Up", duration: "2:44" },
+        { title: "A Kind of Magic", duration: "5:25" },
+        { title: "Under Pressure", duration: "4:12" },
+        { title: "Another One Bites the Dust", duration: "4:38" },
+        { title: "Who Wants to Live Forever", duration: "3:52" },
+        { title: "I Want to Break Free", duration: "3:29" },
+        { title: "Guitar Solo", duration: "6:02" },
+        { title: "Now I'm Here", duration: "5:05" },
+        { title: "Love of My Life", duration: "4:44" },
+        { title: "Tavaszi Szél Vizet Áraszt", duration: "1:08" },
+        { title: "Is This the World We Created...?", duration: "2:07" },
+        { title: "Tutti Frutti", duration: "2:28" },
+        { title: "Bohemian Rhapsody", duration: "5:37" },
+        { title: "Hammer to Fall", duration: "5:20" },
+        { title: "Crazy Little Thing Called Love", duration: "4:38" },
+        { title: "Radio Ga Ga", duration: "5:48" },
+        { title: "We Will Rock You", duration: "2:48" },
+        { title: "Friends Will Be Friends", duration: "3:26" },
+        { title: "We Are the Champions", duration: "3:52" },
+        { title: "God Save the Queen", duration: "1:35" }
+      ]
+    }
+  ]
+};
+
+// ===== APP STATE =====
+let currentView = 'albums'; // 'albums' | 'songs' | 'song'
+let currentAlbum = null;
+let currentSong = null;
+let currentVideoId = '';
+let currentVideoTitle = '';
+
+// ===== RENDER FUNCTIONS =====
+
+function renderAlbums() {
+  currentView = 'albums';
+  currentAlbum = null;
+  document.getElementById('navBack').classList.add('hidden');
+  document.getElementById('breadcrumb').innerHTML = '<span class="current">Discografía</span>';
+
+  const main = document.getElementById('mainContent');
+  let html = '';
+
+  // Search bar
+  html += `<div class="search-container">
+    <input type="text" class="search-input" placeholder="🔍 Buscar álbum o canción..." oninput="filterAlbums(this.value)" id="searchInput">
+  </div>`;
+
+  // Studio albums
+  html += `<div class="album-type-section" id="studioSection">
+    <h2 class="section-title">Álbumes de Estudio</h2>
+    <div class="album-grid">`;
+
+  DISCOGRAPHY.studio.forEach(album => {
+    html += renderAlbumCard(album);
+  });
+
+  html += `</div></div>`;
+
+  // Live albums
+  html += `<div class="album-type-section" id="liveSection">
+    <h2 class="section-title">Álbumes en Directo</h2>
+    <div class="album-grid">`;
+
+  DISCOGRAPHY.live.forEach(album => {
+    html += renderAlbumCard(album);
+  });
+
+  html += `</div></div>`;
+
+  main.innerHTML = html;
+  main.classList.add('fade-in');
+}
+
+function renderAlbumCard(album) {
+  const cardId = `card-${album.id}`;
+  const artUrl = ALBUM_ART[album.id] || '';
+  const imgHtml = artUrl
+    ? `<img class="album-cover-img" src="${artUrl}" alt="${album.name}" loading="lazy" onerror="this.style.display='none'">`
+    : '';
+
+  return `<div class="album-card" onclick="openAlbum('${album.id}')" id="${cardId}">
+    <div class="album-cover">
+      <div class="album-cover-placeholder" style="background: ${album.gradient};">
+        <div class="vinyl-icon">💿</div>
+        <div class="album-name-cover">${album.name}</div>
+      </div>
+      ${imgHtml}
+    </div>
+    <div class="album-info">
+      <div class="album-name">${album.name}</div>
+      <div class="album-year">${album.year}</div>
+      <div class="album-tracks-count">${album.tracks.length} temas</div>
+    </div>
+  </div>`;
+}
+
+function openAlbum(albumId) {
+  const allAlbums = [...DISCOGRAPHY.studio, ...DISCOGRAPHY.live];
+  const album = allAlbums.find(a => a.id === albumId);
+  if (!album) return;
+
+  currentAlbum = album;
+  currentView = 'songs';
+  document.getElementById('navBack').classList.remove('hidden');
+  document.getElementById('breadcrumb').innerHTML = `<span onclick="renderAlbums()">Discografía</span><span class="sep">›</span><span class="current">${album.name}</span>`;
+
+  const isLive = DISCOGRAPHY.live.some(a => a.id === albumId);
+  const albumType = isLive ? 'En Directo' : 'Álbum de Estudio';
+  const totalDuration = calculateTotalDuration(album.tracks);
+
+  const artUrl = ALBUM_ART[album.id] || '';
+  const coverContent = artUrl
+    ? `<img src="${artUrl}" alt="${album.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.outerHTML='<div class=\\'album-cover-placeholder\\' style=\\'background:${album.gradient}\\'><div class=\\'vinyl-icon\\'>💿</div><div class=\\'album-name-cover\\' style=\\'font-size:1em\\'>${album.name}</div></div>'">`
+    : `<div class="album-cover-placeholder" style="background: ${album.gradient};"><div class="vinyl-icon">💿</div><div class="album-name-cover" style="font-size:1em;">${album.name}</div></div>`;
+
+  let html = `<div class="fade-in">
+    <div class="album-header-detail">
+      <div class="album-header-cover">
+        ${coverContent}
+      </div>
+      <div class="album-header-info">
+        <h2>${album.name}</h2>
+        <div class="album-meta">
+          <strong>Año:</strong> ${album.year}<br>
+          <strong>Tipo:</strong> ${albumType}<br>
+          <strong>Canciones:</strong> ${album.tracks.length}<br>
+          <strong>Duración total:</strong> ~${totalDuration}
+        </div>
+        <div class="external-links">
+          <a class="ext-link" href="https://www.youtube.com/results?search_query=Queen+${encodeURIComponent(album.name)}+full+album" target="_blank">▶️ YouTube</a>
+          <a class="ext-link" href="https://open.spotify.com/search/Queen%20${encodeURIComponent(album.name)}" target="_blank">🎧 Spotify</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="tuning-info">
+      <div class="icon">🎸</div>
+      <div class="text">
+        <strong>Afinación de Brian May:</strong> Estándar (E A D G B E). Brian usaba su Red Special con un sixpence como púa y el Vox AC30 para su tono característico.
+      </div>
+    </div>
+
+    <ul class="song-list">`;
+
+  album.tracks.forEach((track, i) => {
+    const hasBt = BACKING_TRACKS[track.title] ? '<span title="Backing track disponible" style="color:#8BC34A; margin-left:8px; font-size:0.8em;">▶ BT</span>' : '';
+    html += `<li class="song-item" onclick="openSong('${album.id}', ${i})">
+      <span class="song-number">${i + 1}</span>
+      <span class="song-title-text">${track.title}${hasBt}</span>
+      <span class="song-duration">${track.duration}</span>
+      <span class="song-guitar-icon">🎸</span>
+    </li>`;
+  });
+
+  html += `</ul></div>`;
+
+  document.getElementById('mainContent').innerHTML = html;
+}
+
+function openSong(albumId, trackIndex) {
+  // Reset auto-scroll from previous song
+  resetAutoScroll();
+  // Don't close or null windows - just let them be reused by the backing track functions
+
+  const allAlbums = [...DISCOGRAPHY.studio, ...DISCOGRAPHY.live];
+  const album = allAlbums.find(a => a.id === albumId);
+  if (!album) return;
+
+  const track = album.tracks[trackIndex];
+  currentSong = { album, track, trackIndex };
+  currentView = 'song';
+
+  document.getElementById('svTitle').textContent = track.title;
+  document.getElementById('svAlbum').textContent = `${album.name} (${album.year})`;
+
+  // Detect if this is a live album
+  const isLive = DISCOGRAPHY.live.some(a => a.id === albumId);
+
+  // Build context-aware search query
+  let searchQuery;
+  if (isLive) {
+    // For live albums, search for the live version
+    const liveInfo = album.name.replace(/^(Live |Queen )/, '').replace(/'/g, '');
+    searchQuery = `Queen ${track.title} live backing track no guitar ${liveInfo}`;
+  } else {
+    searchQuery = `Queen ${track.title} backing track no guitar`;
+  }
+  document.getElementById('btSearchInput').value = searchQuery;
+  document.getElementById('btUrlSection').style.display = 'none';
+  document.getElementById('btPlayer').style.display = 'none';
+  document.getElementById('btNowPlaying').textContent = '';
+
+  // Auto-play backing track when selecting a song
+  // For studio albums with pre-loaded track: play immediately
+  // For live albums: open YouTube search in popup automatically
+  // For songs without pre-loaded track: open YouTube search in popup automatically
+  const btVideoId = !isLive ? BACKING_TRACKS[track.title] : null;
+  if (btVideoId) {
+    // Auto-play the pre-loaded backing track immediately
+    setTimeout(() => playBackingTrackVideo(btVideoId), 300);
+  } else if (isLive) {
+    // Auto-open YouTube search for the live version in popup
+    setTimeout(() => searchBackingTrackInPopup(searchQuery), 300);
+  } else {
+    // Auto-open YouTube search for studio version in popup
+    setTimeout(() => searchBackingTrackInPopup(searchQuery), 300);
+  }
+
+  // Load Cifra Club directly (only source that works in iframe)
+  const sources = getChordUrls(track.title);
+  loadChordIframe(sources.cifraclub.url, sources.cifraclub.searchUrl, sources.guitartuna);
+
+  // Set GuitarTuna header button link
+  document.getElementById('svGuitarTunaBtn').href = sources.guitartuna.url;
+
+  // Set fallback bar links
+  document.getElementById('svFallbackCifra').href = sources.cifraclub.url;
+  document.getElementById('svFallbackGT').href = sources.guitartuna.url;
+  document.getElementById('svFallbackGoogle').href = `https://www.google.com/search?q=${encodeURIComponent('Queen ' + track.title + ' chords guitar')}`;
+
+  // Show the fullscreen view
+  document.getElementById('songView').classList.add('active');
+  document.body.style.overflow = 'hidden';
+
+  // Update breadcrumb
+  document.getElementById('breadcrumb').innerHTML =
+    `<span onclick="renderAlbums()">Discografía</span><span class="sep">›</span><span onclick="closeSongView(); openAlbum('${album.id}')">${album.name}</span><span class="sep">›</span><span class="current">${track.title}</span>`;
+}
+
+// ===== AUTO-SCROLL =====
+let autoScrollActive = false;
+let autoScrollSpeed = 3; // 1-5 scale
+let autoScrollInterval = null;
+
+function toggleAutoScroll() {
+  autoScrollActive = !autoScrollActive;
+  const btn = document.getElementById('svScrollToggle');
+  if (autoScrollActive) {
+    btn.textContent = '⏸ Scroll';
+    btn.classList.add('active');
+    startAutoScroll();
+    // Also bring YouTube window to focus so both start together
+    if (btWindow && !btWindow.closed) {
+      btWindow.focus();
+    }
+  } else {
+    btn.textContent = '▶ Scroll';
+    btn.classList.remove('active');
+    stopAutoScroll();
+  }
+}
+
+function startAutoScroll() {
+  stopAutoScroll();
+  // Speed: 1=very slow, 3=normal, 5=fast
+  // Scroll the iframe's parent container (sv-chords-panel)
+  const panel = document.getElementById('svChordsPanel');
+  const iframe = document.getElementById('svIframe');
+  // Since we can't scroll inside the iframe (cross-origin), we scroll the iframe itself
+  // by moving its top position gradually
+  // Speed 1-10: calculate px per tick with smooth curve
+  const pxPerTick = 0.03 + (autoScrollSpeed - 1) * 0.05;
+
+  autoScrollInterval = setInterval(() => {
+    if (!autoScrollActive) { stopAutoScroll(); return; }
+    const currentTop = parseFloat(iframe.style.top) || 0;
+    iframe.style.top = (currentTop - pxPerTick) + 'px';
+  }, 30);
+}
+
+function stopAutoScroll() {
+  if (autoScrollInterval) {
+    clearInterval(autoScrollInterval);
+    autoScrollInterval = null;
+  }
+}
+
+function changeScrollSpeed(delta) {
+  autoScrollSpeed = Math.max(1, Math.min(10, autoScrollSpeed + delta));
+  document.getElementById('svScrollSpeed').textContent = autoScrollSpeed;
+  // If scrolling is active, restart with new speed
+  if (autoScrollActive) {
+    startAutoScroll();
+  }
+}
+
+function resetAutoScroll() {
+  autoScrollActive = false;
+  stopAutoScroll();
+  const btn = document.getElementById('svScrollToggle');
+  if (btn) {
+    btn.textContent = '▶ Scroll';
+    btn.classList.remove('active');
+  }
+  // Reset iframe position
+  const iframe = document.getElementById('svIframe');
+  if (iframe) iframe.style.top = '0px';
+}
+
+// ===== CHORD IFRAME & SOURCES =====
+let chordsWindow = null;
+let currentIframeUrl = '';
+
+// Known correct Cifra Club slugs (their slugs don't always match the song title)
+const CIFRA_SLUGS = {
+  "Tie Your Mother Down": "tie-you-mother-down",
+  "Bohemian Rhapsody": "bohemian-rhapsody",
+  "We Will Rock You": "we-will-rock-you",
+  "We Are the Champions": "we-are-the-champions",
+  "Don't Stop Me Now": "dont-stop-me-now",
+  "Somebody to Love": "somebody-to-love",
+  "Another One Bites the Dust": "another-one-bites-the-dust",
+  "Killer Queen": "killer-queen",
+  "Under Pressure": "under-pressure",
+  "I Want to Break Free": "i-want-to-break-free",
+  "Love of My Life": "love-of-my-life",
+  "Radio Ga Ga": "radio-ga-ga",
+  "Crazy Little Thing Called Love": "crazy-little-thing-called-love",
+  "Who Wants to Live Forever": "who-wants-to-live-forever",
+  "The Show Must Go On": "the-show-must-go-on",
+  "A Kind of Magic": "a-kind-of-magic",
+  "Hammer to Fall": "hammer-to-fall",
+  "One Vision": "one-vision",
+  "Friends Will Be Friends": "friends-will-be-friends",
+  "I Want It All": "i-want-it-all",
+  "Now I'm Here": "now-im-here",
+  "Keep Yourself Alive": "keep-yourself-alive",
+  "Save Me": "save-me",
+  "Play the Game": "play-the-game",
+  "Spread Your Wings": "spread-your-wings",
+  "Fat Bottomed Girls": "fat-bottomed-girls",
+  "You're My Best Friend": "youre-my-best-friend",
+  "'39": "39",
+  "Bicycle Race": "bicycle-race",
+  "Innuendo": "innuendo",
+  "Headlong": "headlong",
+  "These Are the Days of Our Lives": "these-are-the-days-of-our-lives",
+  "Stone Cold Crazy": "stone-cold-crazy",
+  "Brighton Rock": "brighton-rock",
+  "Seven Seas of Rhye": "seven-seas-of-rhye",
+  "Flash's Theme": "flash",
+  "I Was Born to Love You": "i-was-born-to-love-you",
+  "Heaven for Everyone": "heaven-for-everyone",
+  "Too Much Love Will Kill You": "too-much-love-will-kill-you",
+  "It's a Hard Life": "its-a-hard-life",
+  "Princes of the Universe": "princes-of-the-universe",
+  "Sheer Heart Attack": "sheer-heart-attack",
+  "Dragon Attack": "dragon-attack",
+  "Good Old-Fashioned Lover Boy": "good-old-fashioned-lover-boy"
+};
+
+function getChordUrls(songTitle) {
+  const qFull = encodeURIComponent('Queen ' + songTitle);
+  const searchUrl = `https://www.cifraclub.com.br/?q=${qFull}`;
+
+  // Use known slug if available, otherwise generate one
+  let slug = CIFRA_SLUGS[songTitle];
+  if (!slug) {
+    slug = songTitle.toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
+  }
+
+  // GuitarTuna slug (uses -chords suffix)
+  const gtSlug = songTitle.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+
+  return {
+    cifraclub: {
+      url: `https://www.cifraclub.com.br/queen/${slug}/`,
+      searchUrl: searchUrl
+    },
+    guitartuna: {
+      url: `https://guitartuna.com/chords/queen/${gtSlug}-chords`,
+      searchUrl: `https://www.google.com/search?q=site:guitartuna.com+queen+${encodeURIComponent(songTitle)}+chords`
+    }
+  };
+}
+
+function loadChordIframe(url, fallbackSearchUrl, guitartunaUrls) {
+  const iframe = document.getElementById('svIframe');
+  const loading = document.getElementById('svLoading');
+  const error = document.getElementById('svIframeError');
+
+  currentIframeUrl = url;
+
+  // Show loading, hide error, reset iframe visibility
+  loading.classList.remove('hidden');
+  error.classList.remove('active');
+  iframe.style.display = '';
+
+  // Set fallback links
+  document.getElementById('svExternalLink').href = url;
+  if (guitartunaUrls) {
+    document.getElementById('svGuitarTunaLink').href = guitartunaUrls.url;
+    document.getElementById('svGuitarTunaSearch').href = guitartunaUrls.searchUrl;
+  }
+
+  // Load iframe
+  iframe.src = url;
+
+  iframe.onload = function() {
+    loading.classList.add('hidden');
+  };
+
+  // If song not in CIFRA_SLUGS, it might not exist - show GuitarTuna fallback after timeout
+  const songTitle = currentSong ? currentSong.track.title : '';
+  const isVerifiedSlug = CIFRA_SLUGS[songTitle];
+
+  if (!isVerifiedSlug && guitartunaUrls) {
+    // Song not verified on Cifra Club - auto-open GuitarTuna in popup after short delay
+    setTimeout(() => {
+      error.classList.add('active');
+      iframe.style.display = 'none';
+      openChordsInGuitarTuna(guitartunaUrls.url);
+    }, 2000);
+  }
+
+  // Timeout: hide loading after 4s regardless
+  setTimeout(() => {
+    loading.classList.add('hidden');
+  }, 4000);
+}
+
+function openChordsPopup(url, sourceName) {
+  const screenW = window.screen.availWidth;
+  const screenH = window.screen.availHeight;
+  const popW = Math.floor(screenW * 0.48);
+  const popH = screenH;
+  const popX = screenW - popW;
+
+  if (chordsWindow && !chordsWindow.closed) {
+    chordsWindow.location.href = url;
+    chordsWindow.focus();
+  } else {
+    chordsWindow = window.open(url, 'queenChords',
+      `width=${popW},height=${popH},left=${popX},top=0,scrollbars=yes,resizable=yes`);
+  }
+}
+
+let gtWindow = null;
+function openChordsInGuitarTuna(url) {
+  // Open GuitarTuna in a popup positioned on the left side of the screen
+  const screenW = window.screen.availWidth;
+  const screenH = window.screen.availHeight;
+  const popW = Math.floor(screenW * 0.5);
+  const popH = screenH - 100;
+  const popX = 0;
+  const popY = 50;
+
+  if (gtWindow && !gtWindow.closed) {
+    gtWindow.location.href = url;
+    gtWindow.focus();
+  } else {
+    gtWindow = window.open(url, 'queenGT',
+      `width=${popW},height=${popH},left=${popX},top=${popY},scrollbars=yes,resizable=yes`);
+  }
+}
+
+function closeSongView() {
+  document.getElementById('songView').classList.remove('active');
+  document.body.style.overflow = '';
+  currentView = currentAlbum ? 'songs' : 'albums';
+
+  // Reset auto-scroll
+  resetAutoScroll();
+
+  // Stop chord iframe
+  document.getElementById('svIframe').src = '';
+  currentVideoId = '';
+  currentVideoTitle = '';
+
+  // Minimize and blank YouTube/GuitarTuna popup windows
+  // (Chrome blocks window.close() after user interaction, so we blank + minimize instead)
+  try {
+    if (btWindow && !btWindow.closed) {
+      btWindow.location.href = 'about:blank';
+      btWindow.resizeTo(1, 1);
+      btWindow.moveTo(-100, -100);
+    }
+  } catch(e) {}
+  try {
+    if (gtWindow && !gtWindow.closed) {
+      gtWindow.location.href = 'about:blank';
+      gtWindow.resizeTo(1, 1);
+      gtWindow.moveTo(-100, -100);
+    }
+  } catch(e) {}
+
+  if (currentAlbum) {
+    document.getElementById('breadcrumb').innerHTML =
+      `<span onclick="renderAlbums()">Discografía</span><span class="sep">›</span><span class="current">${currentAlbum.name}</span>`;
+  }
+}
+
+function extractVideoId(url) {
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/,
+    /^([a-zA-Z0-9_-]{11})$/
+  ];
+  for (const pattern of patterns) {
+    const match = url.match(pattern);
+    if (match) return match[1];
+  }
+  return '';
+}
+
+// ===== BACKING TRACK PANEL =====
+function toggleBtPanel() {
+  const panel = document.getElementById('svBtPanel');
+  panel.classList.toggle('hidden');
+}
+
+function toggleBtUrlInput() {
+  const section = document.getElementById('btUrlSection');
+  section.style.display = section.style.display === 'none' ? 'block' : 'none';
+}
+
+function searchBackingTrack() {
+  const query = document.getElementById('btSearchInput').value;
+  if (!query) return;
+  searchBackingTrackInPopup(query);
+}
+
+function searchBackingTrackInPopup(query) {
+  const url = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
+
+  // Open search results in the same popup window used for backing tracks
+  const popW = 675;
+  const popH = 820;
+  const screenW = window.screen.availWidth;
+  const screenH = window.screen.availHeight;
+  const popX = Math.round(screenW * 0.55) - 76;
+  const popY = Math.round((screenH - popH) / 2);
+
+  if (btWindow && !btWindow.closed) {
+    btWindow.resizeTo(popW, popH);
+    btWindow.moveTo(popX, popY);
+    btWindow.location.href = url;
+    btWindow.focus();
+  } else {
+    btWindow = window.open(url, 'queenBT',
+      `width=${popW},height=${popH},left=${popX},top=${popY},toolbar=no,menubar=no,resizable=yes,scrollbars=yes`);
+  }
+
+  document.getElementById('btPlayer').style.display = 'block';
+  document.getElementById('btNowPlaying').textContent = '🔍 Buscando en YouTube...';
+
+  document.getElementById('btResults').innerHTML = `
+    <div class="sv-bt-placeholder">
+      <div class="bt-icon" style="font-size:1.5em;">🎸🔍</div>
+      <p style="color:var(--gold);">Búsqueda abierta en la ventana de YouTube</p>
+      <p class="bt-hint">Elige el vídeo que prefieras y dale a reproducir directamente allí</p>
+      <button class="sv-yt-btn red" onclick="if(btWindow && !btWindow.closed) btWindow.focus();" style="margin-top:8px;">🔊 Ir a ventana de YouTube</button>
+    </div>`;
+}
+
+let btWindow = null;
+
+function loadBackingTrack() {
+  const urlInput = document.getElementById('btVideoUrl');
+  if (!urlInput) return;
+
+  const url = urlInput.value.trim();
+  const videoId = extractVideoId(url);
+
+  if (!videoId) {
+    alert('No se pudo reconocer el enlace de YouTube. Pega la URL completa del vídeo.');
+    return;
+  }
+
+  currentVideoId = videoId;
+  playBackingTrackVideo(videoId);
+}
+
+function playBackingTrackVideo(videoId) {
+  const ytUrl = `https://www.youtube.com/watch?v=${videoId}`;
+
+  // Popup positioned center-right, 25% narrower
+  const popW = 675;
+  const popH = 820;
+  const screenW = window.screen.availWidth;
+  const screenH = window.screen.availHeight;
+  const popX = Math.round(screenW * 0.55) - 76;
+  const popY = Math.round((screenH - popH) / 2);
+
+  if (btWindow && !btWindow.closed) {
+    btWindow.resizeTo(popW, popH);
+    btWindow.moveTo(popX, popY);
+    btWindow.location.href = ytUrl;
+    btWindow.focus();
+  } else {
+    btWindow = window.open(ytUrl, 'queenBT',
+      `width=${popW},height=${popH},left=${popX},top=${popY},toolbar=no,menubar=no,resizable=yes,scrollbars=no`);
+  }
+
+  document.getElementById('btPlayer').style.display = 'block';
+  document.getElementById('btNowPlaying').textContent = '▶ Reproduciéndose en ventana externa';
+  document.getElementById('btResults').innerHTML = `
+    <div class="sv-bt-placeholder">
+      <div class="bt-icon" style="font-size:1.5em;">🎸🎵</div>
+      <p style="color:var(--gold);">¡A tocar! La backing track suena en la ventana de YouTube.</p>
+      <p class="bt-hint">Sigue los acordes de la izquierda mientras tocas</p>
+      <button class="sv-yt-btn red" onclick="if(btWindow && !btWindow.closed) btWindow.focus();" style="margin-top:8px;">🔊 Ir a ventana de YouTube</button>
+    </div>`;
+}
+
+function goBack() {
+  if (currentView === 'songs') {
+    renderAlbums();
+  } else if (currentView === 'song') {
+    closeSongView();
+  }
+}
+
+function filterAlbums(query) {
+  query = query.toLowerCase().trim();
+  const allCards = document.querySelectorAll('.album-card');
+  const allAlbums = [...DISCOGRAPHY.studio, ...DISCOGRAPHY.live];
+  let studioVisible = 0, liveVisible = 0;
+
+  allCards.forEach((card, index) => {
+    const album = allAlbums[index];
+    const matchAlbum = album.name.toLowerCase().includes(query);
+    const matchSong = album.tracks.some(t => t.title.toLowerCase().includes(query));
+    const matchYear = album.year.toString().includes(query);
+    const visible = !query || matchAlbum || matchSong || matchYear;
+
+    card.style.display = visible ? '' : 'none';
+
+    if (visible) {
+      if (index < DISCOGRAPHY.studio.length) studioVisible++;
+      else liveVisible++;
+    }
+  });
+
+  // Hide section headers if no results
+  const studioSection = document.getElementById('studioSection');
+  const liveSection = document.getElementById('liveSection');
+  if (studioSection) studioSection.style.display = studioVisible > 0 ? '' : 'none';
+  if (liveSection) liveSection.style.display = liveVisible > 0 ? '' : 'none';
+}
+
+function calculateTotalDuration(tracks) {
+  let totalSeconds = 0;
+  tracks.forEach(t => {
+    const parts = t.duration.split(':');
+    totalSeconds += parseInt(parts[0]) * 60 + parseInt(parts[1]);
+  });
+  const hours = Math.floor(totalSeconds / 3600);
+  const mins = Math.floor((totalSeconds % 3600) / 60);
+  return hours > 0 ? `${hours}h ${mins}min` : `${mins} min`;
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    if (currentView === 'song') closeSongView();
+    else if (currentView === 'songs') renderAlbums();
+  }
+});
+
+// ===== ALBUM ART (Cover Art Archive - MusicBrainz) =====
+// Using release-group IDs for direct image URLs (no API/CORS needed)
+const ALBUM_ART = {
+  "queen-1973": "https://coverartarchive.org/release-group/810068af-2b3c-3e9c-b2ab-68a3f3e3787d/front-500",
+  "queen-ii-1974": "https://coverartarchive.org/release-group/93d91bd6-1b55-3751-bca7-8b9d33beb7ef/front-500",
+  "sheer-heart-attack-1974": "https://coverartarchive.org/release-group/002ed683-3327-3df0-88c8-318746089925/front-500",
+  "a-night-at-the-opera-1975": "https://coverartarchive.org/release-group/6b47c9a0-b9e1-3df9-a5e8-50a6ce0dbdbd/front-500",
+  "a-day-at-the-races-1976": "https://coverartarchive.org/release-group/a106e33b-e440-3ff3-9250-c6408ed73e60/front-500",
+  "news-of-the-world-1977": "https://coverartarchive.org/release-group/c172ea98-3a82-3254-b8ad-25a4f465ba03/front-500",
+  "jazz-1978": "https://coverartarchive.org/release-group/c192ea46-7377-34f0-b332-dd9810edd560/front-500",
+  "the-game-1980": "https://coverartarchive.org/release-group/75702ddf-a46c-3cac-bace-0a466eb3c37c/front-500",
+  "flash-gordon-1980": "https://coverartarchive.org/release-group/70bd9521-c3ea-38c9-9d67-a6a6100bfa48/front-500",
+  "hot-space-1982": "https://coverartarchive.org/release-group/3918b90b-340e-3779-9d7e-ba1593653498/front-500",
+  "the-works-1984": "https://coverartarchive.org/release-group/44c90c72-76b5-3c13-890e-3d37f21c10c9/front-500",
+  "a-kind-of-magic-1986": "https://coverartarchive.org/release-group/f878e548-3501-437f-8fab-884a36ec6abe/front-500",
+  "the-miracle-1989": "https://coverartarchive.org/release-group/b3d2bd3e-0698-3b9a-ad65-754457cd7898/front-500",
+  "innuendo-1991": "https://coverartarchive.org/release-group/daf57856-a734-3441-b0fd-26aa5f28ca64/front-500",
+  "made-in-heaven-1995": "https://coverartarchive.org/release-group/780e6a16-9384-307d-ae65-02e1d6313753/front-500",
+  "live-killers-1979": "https://coverartarchive.org/release-group/c8425a2f-c6fd-3656-aeda-162bf996b622/front-500",
+  "live-magic-1986": "https://coverartarchive.org/release-group/c88dba71-c542-3424-b746-05f6c8f3e060/front-500",
+  "live-at-wembley-1992": "https://coverartarchive.org/release-group/372f535d-a06d-35f4-a171-5f63e27c3f8d/front-500",
+  "queen-on-fire-2004": "https://coverartarchive.org/release-group/c9a223e1-377f-363f-9699-4d209006a2b7/front-500",
+  "queen-rock-montreal-2007": "https://coverartarchive.org/release-group/e0d97e8d-dc9e-3f1b-91a4-ec7df83eecb1/front-500",
+  "hungarian-rhapsody-2012": "https://coverartarchive.org/release-group/4ffec0b4-26c6-4e6c-82a0-40d0be080c9f/front-500"
+};
+
+const albumArtCache = {};
+
+// ===== BACKING TRACKS DATABASE (YouTube video IDs) =====
+// Pre-searched backing tracks without guitar for popular Queen songs
+const BACKING_TRACKS = {
+  "Bohemian Rhapsody": "afou4xQ77K4",
+  "We Will Rock You": "-24lhQKYo9A",
+  "We Are the Champions": "yOHAJHJhFr4",
+  "Don't Stop Me Now": "bp9xAqlaG9g",
+  "Somebody to Love": "8BOG5lx8S6s",
+  "Another One Bites the Dust": "Dmz2hySNZa0",
+  "Crazy Little Thing Called Love": "beE85QlrOro",
+  "I Want to Break Free": "sZa0j4A12S4",
+  "Under Pressure": "JnWrqG1Es3I",
+  "Killer Queen": "VLjLcmenFw8",
+  "Radio Ga Ga": "C2z5d8im7rg",
+  "One Vision": "3tbVgynSZbI",
+  "Hammer to Fall": "CWaEABFFptE",
+  "A Kind of Magic": "1iCHu81KmLo",
+  "Who Wants to Live Forever": "E7ihiI-8iXE",
+  "The Show Must Go On": "58qcMCZwkwU",
+  "Love of My Life": "zMPsuEJTUg0",
+  "Tie Your Mother Down": "ziT5Ri9PW50",
+  "Keep Yourself Alive": "lXG5Qw1cgFI",
+  "Fat Bottomed Girls": "L0v6Ywg21Uc",
+  "I Want It All": "4LBxlD7MUcY",
+  "Friends Will Be Friends": "-S3xlJozzEo",
+  "Save Me": "cVYUYcyIU4Q",
+  "Play the Game": "Zz1RFMItTaE",
+  "Spread Your Wings": "VhfyWpbLqiE",
+  "Now I'm Here": "lj-wpwpQRRI"
+};
+
+// ===== INIT =====
+renderAlbums();
+</script>
+</body>
+</html>
