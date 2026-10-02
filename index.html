@@ -869,10 +869,10 @@
           <div class="spinner"></div>
           <p>Cargando acordes...</p>
         </div>
-        <iframe id="svIframe" sandbox="allow-scripts allow-forms" loading="eager"></iframe>
+        <iframe id="svIframe" sandbox="allow-scripts allow-forms allow-same-origin" loading="eager"></iframe>
         <div class="sv-iframe-error" id="svIframeError">
           <p style="font-size:1.5em;">🎸</p>
-          <p>No se encontraron los acordes en Cifra Club.</p>
+          <p id="svIframeErrorText">No se encontraron los acordes en Cifra Club.</p>
           <p style="margin-top:12px;">Prueba en otra fuente:</p>
           <a id="svGuitarTunaLink" href="#" onclick="event.preventDefault(); openChordsInGuitarTuna(this.href);" class="sv-yt-btn red" style="display:inline-block; margin-top:8px; padding:10px 20px; text-decoration:none; font-size:0.9em; cursor:pointer;">🎵 Abrir en GuitarTuna</a>
           <a id="svGuitarTunaSearch" href="#" target="_blank" class="sv-yt-btn" style="display:inline-block; margin-top:6px; padding:8px 16px; text-decoration:none; font-size:0.8em;">🔍 Buscar en Google → GuitarTuna</a>
@@ -1625,7 +1625,7 @@ function openSong(albumId, trackIndex) {
   document.getElementById('svGuitarTunaBtn').href = sources.guitartuna.url;
 
   // Set fallback bar links
-  document.getElementById('svFallbackCifra').href = sources.cifraclub.url;
+  document.getElementById('svFallbackCifra').href = sources.cifraclub.url || sources.cifraclub.searchUrl;
   document.getElementById('svFallbackGT').href = sources.guitartuna.url;
   document.getElementById('svFallbackGoogle').href = `https://www.google.com/search?q=${encodeURIComponent('Queen ' + track.title + ' chords guitar')}`;
 
@@ -1712,68 +1712,176 @@ function resetAutoScroll() {
 let chordsWindow = null;
 let currentIframeUrl = '';
 
-// Known correct Cifra Club slugs (their slugs don't always match the song title)
+// Known correct Cifra Club slugs (their slugs don't always match the song title).
+// Built from Cifra Club's own Queen catalog (225 songs), not guessed — covers ~155
+// of the ~188 distinct tracks in the discography below. The remainder are mostly
+// instrumental score cues / medley fragments that Cifra Club genuinely doesn't have.
 const CIFRA_SLUGS = {
-  "Tie Your Mother Down": "tie-you-mother-down",
-  "Bohemian Rhapsody": "bohemian-rhapsody",
-  "We Will Rock You": "we-will-rock-you",
-  "We Are the Champions": "we-are-the-champions",
-  "Don't Stop Me Now": "dont-stop-me-now",
-  "Somebody to Love": "somebody-to-love",
-  "Another One Bites the Dust": "another-one-bites-the-dust",
-  "Killer Queen": "killer-queen",
-  "Under Pressure": "under-pressure",
-  "I Want to Break Free": "i-want-to-break-free",
-  "Love of My Life": "love-of-my-life",
-  "Radio Ga Ga": "radio-ga-ga",
-  "Crazy Little Thing Called Love": "crazy-little-thing-called-love",
-  "Who Wants to Live Forever": "who-wants-to-live-forever",
-  "The Show Must Go On": "the-show-must-go-on",
-  "A Kind of Magic": "a-kind-of-magic",
-  "Hammer to Fall": "hammer-to-fall",
-  "One Vision": "one-vision",
-  "Friends Will Be Friends": "friends-will-be-friends",
-  "I Want It All": "i-want-it-all",
-  "Now I'm Here": "now-im-here",
-  "Keep Yourself Alive": "keep-yourself-alive",
-  "Save Me": "save-me",
-  "Play the Game": "play-the-game",
-  "Spread Your Wings": "spread-your-wings",
-  "Fat Bottomed Girls": "fat-bottomed-girls",
-  "You're My Best Friend": "youre-my-best-friend",
   "'39": "39",
+  "(You're So Square) Baby I Don't Care": "youre-so-square-baby-i-dont-care",
+  "A Kind of Magic": "a-kind-of-magic",
+  "A Winter's Tale": "a-winters-tale",
+  "Action This Day": "action-this-day",
+  "All Dead, All Dead": "all-dead-all-dead",
+  "Another One Bites the Dust": "another-one-bites-the-dust",
+  "Back Chat": "back-chat",
+  "Battle Theme": "battle-theme",
   "Bicycle Race": "bicycle-race",
-  "Innuendo": "innuendo",
-  "Headlong": "headlong",
-  "These Are the Days of Our Lives": "these-are-the-days-of-our-lives",
-  "Stone Cold Crazy": "stone-cold-crazy",
+  "Bijou": "bijou",
+  "Body Language": "body-language",
+  "Bohemian Rhapsody": "bohemian-rhapsody",
+  "Breakthru": "breakthru",
   "Brighton Rock": "brighton-rock",
-  "Seven Seas of Rhye": "seven-seas-of-rhye",
-  "Flash's Theme": "flash",
-  "I Was Born to Love You": "i-was-born-to-love-you",
-  "Heaven for Everyone": "heaven-for-everyone",
-  "Too Much Love Will Kill You": "too-much-love-will-kill-you",
-  "It's a Hard Life": "its-a-hard-life",
-  "Princes of the Universe": "princes-of-the-universe",
-  "Sheer Heart Attack": "sheer-heart-attack",
+  "Bring Back That Leroy Brown": "bring-back-that-leroy-brown",
+  "Calling All Girls": "calling-all-girls",
+  "Coming Soon": "coming-soon",
+  "Cool Cat": "cool-cat",
+  "Crazy Little Thing Called Love": "crazy-little-thing-called-love",
+  "Dead on Time": "dead-on-time",
+  "Dear Friends": "dear-friends",
+  "Death on Two Legs": "death-on-two-legs",
+  "Death on Two Legs (Dedicated to...)": "death-on-two-legs",
+  "Delilah": "delilah",
+  "Doing All Right": "doing-all-right",
+  "Don't Stop Me Now": "dont-stop-me-now",
+  "Don't Try So Hard": "dont-try-so-hard-2",
+  "Don't Try Suicide": "dont-try-suicide",
   "Dragon Attack": "dragon-attack",
-  "Good Old-Fashioned Lover Boy": "good-old-fashioned-lover-boy"
+  "Dreamer's Ball": "dreamers-ball",
+  "Drowse": "drowse",
+  "Execution of Flash": "execution-of-flash",
+  "Fat Bottomed Girls": "fat-bottomed-girls",
+  "Father to Son": "father-to-son",
+  "Fight from the Inside": "fight-from-the-inside",
+  "Flash": "flash",
+  "Flash's Theme": "flash",
+  "Flick of the Wrist": "flick-of-the-wrist",
+  "Friends Will Be Friends": "friends-will-be-friends",
+  "Fun It": "fun-it",
+  "Funny How Love Is": "funny-how-love-is",
+  "Get Down, Make Love": "get-down-make-love",
+  "Gimme Some Lovin'": "gimme-some-lovin",
+  "Gimme the Prize (Kurgan's Theme)": "gimme-the-prize",
+  "God Save the Queen": "god-save-the-queen",
+  "Good Company": "good-company",
+  "Good Old-Fashioned Lover Boy": "good-old-fashioned-lover-boy",
+  "Great King Rat": "great-king-rat",
+  "Hammer to Fall": "hammer-to-fall",
+  "Headlong": "headlong",
+  "Heaven for Everyone": "heaven-for-everyone",
+  "Hello Mary Lou (Goodbye Heart)": "hello-mary-lou",
+  "I Can't Live with You": "i-cant-live-with-you",
+  "I Want It All": "i-want-it-all",
+  "I Want to Break Free": "i-want-to-break-free",
+  "I Was Born to Love You": "i-was-born-to-love-you",
+  "I'm Going Slightly Mad": "im-going-slightly-mad",
+  "I'm in Love with My Car": "im-in-love-with-my-car",
+  "If You Can't Beat Them": "if-you-cant-beat-them",
+  "In Only Seven Days": "in-only-seven-days",
+  "In the Lap of the Gods": "in-the-lap-of-the-gods",
+  "In the Lap of the Gods... Revisited": "in-the-lap-of-the-gods-revisited",
+  "Innuendo": "innuendo",
+  "Is This the World We Created...?": "is-this-the-world-we-created",
+  "It's a Beautiful Day": "its-beautiful-day",
+  "It's a Beautiful Day (Reprise)": "its-beautiful-day",
+  "It's a Hard Life": "its-a-hard-life",
+  "It's Late": "its-late",
+  "Jealousy": "jealousy",
+  "Jesus": "jesus",
+  "Keep Passing the Open Windows": "keep-passing-the-open-windows",
+  "Keep Yourself Alive": "keep-yourself-alive",
+  "Killer Queen": "killer-queen",
+  "Las Palabras de Amor (The Words of Love)": "las-palabras-de-amor",
+  "Lazing on a Sunday Afternoon": "lazing-on-sunday-afternoon",
+  "Leaving Home Ain't Easy": "leaving-home-aint-easy",
+  "Let Me Entertain You": "let-me-entertain-you",
+  "Let Me Live": "let-me-live",
+  "Liar": "liar",
+  "Life Is Real (Song for Lennon)": "life-is-real-song-for-lennon",
+  "Lily of the Valley": "lily-of-the-valley",
+  "Long Away": "long-away",
+  "Love of My Life": "love-of-my-life",
+  "Machines (or 'Back to Humans')": "machines-or-back-to-humans",
+  "Made in Heaven": "made-in-heaven",
+  "Misfire": "misfire",
+  "Modern Times Rock 'n' Roll": "modern-times-rock-n-roll-2",
+  "More of That Jazz": "more-of-that-jazz",
+  "Mother Love": "mother-love",
+  "Mustapha": "mustapha",
+  "My Baby Does Me": "my-baby-does-me",
+  "My Life Has Been Saved": "my-life-has-been-saved",
+  "My Melancholy Blues": "my-melancholy-blues",
+  "Need Your Loving Tonight": "need-your-loving-tonight",
+  "Nevermore": "nevermore",
+  "Now I'm Here": "now-im-here",
+  "Now I'm Here (Reprise)": "now-im-here",
+  "Ogre Battle": "ogre-battle",
+  "One Vision": "one-vision",
+  "One Year of Love": "one-year-of-love",
+  "Pain Is So Close to Pleasure": "pain-is-so-close-to-pleasure",
+  "Play the Game": "play-the-game",
+  "Princes of the Universe": "princes-of-the-universe",
+  "Procession": "procession",
+  "Put Out the Fire": "put-out-the-fire",
+  "Radio Ga Ga": "radio-ga-ga",
+  "Rain Must Fall": "rain-must-fall",
+  "Ride the Wild Wind": "ride-the-wild-wind",
+  "Rock It (Prime Jive)": "rock-it",
+  "Sail Away Sweet Sister": "sail-away-sweet-sister",
+  "Save Me": "save-me",
+  "Scandal": "scandal",
+  "Seaside Rendezvous": "seaside-rendezvous",
+  "Seven Seas of Rhye": "seven-seas-of-rhye",
+  "Seven Seas of Rhye... (Instrumental)": "seven-seas-of-rhye",
+  "She Makes Me (Stormtrooper in Stilettoes)": "she-makes-me",
+  "Sheer Heart Attack": "sheer-heart-attack",
+  "Sleeping on the Sidewalk": "sleeping-on-the-sidewalk",
+  "Some Day One Day": "some-day-one-day",
+  "Somebody to Love": "somebody-to-love",
+  "Son and Daughter": "son-and-daughter",
+  "Spread Your Wings": "spread-your-wings",
+  "Stone Cold Crazy": "stone-cold-crazy",
+  "Sweet Lady": "sweet-lady",
+  "Tear It Up": "tear-it-up",
+  "Tenement Funster": "tenement-funster",
+  "Teo Torriatte (Let Us Cling Together)": "teo-torriate-let-us-cling-together",
+  "The Fairy Feller's Master-Stroke": "the-fairy-fellers-master-stroke-2",
+  "The Hero": "the-hero",
+  "The Invisible Man": "the-invisible-man",
+  "The Loser in the End": "the-loser-in-the-end",
+  "The March of the Black Queen": "the-march-of-the-black-queen",
+  "The Millionaire Waltz": "the-millionaire-waltz",
+  "The Miracle": "the-miracle",
+  "The Night Comes Down": "the-night-comes-down",
+  "The Prophet's Song": "the-prophets-song-3",
+  "The Show Must Go On": "the-show-must-go-on",
+  "These Are the Days of Our Lives": "these-are-the-days-of-our-lives",
+  "Tie Your Mother Down": "tie-you-mother-down",
+  "Too Much Love Will Kill You": "too-much-love-will-kill-you",
+  "Tutti Frutti": "tutti-frutti",
+  "Under Pressure": "under-pressure",
+  "Was It All Worth It": "was-it-all-worth-it",
+  "We Are the Champions": "we-are-the-champions",
+  "We Will Rock You": "we-will-rock-you",
+  "We Will Rock You (Fast)": "we-will-rock-you",
+  "White Man": "white-man",
+  "White Queen (As It Began)": "white-queen",
+  "Who Needs You": "who-needs-you",
+  "Who Wants to Live Forever": "who-wants-to-live-forever",
+  "You and I": "you-and-i",
+  "You Don't Fool Me": "you-dont-fool-me",
+  "You Take My Breath Away": "you-take-my-breath-away",
+  "You're My Best Friend": "youre-my-best-friend"
 };
 
 function getChordUrls(songTitle) {
   const qFull = encodeURIComponent('Queen ' + songTitle);
   const searchUrl = `https://www.cifraclub.com.br/?q=${qFull}`;
 
-  // Use known slug if available, otherwise generate one
-  let slug = CIFRA_SLUGS[songTitle];
-  if (!slug) {
-    slug = songTitle.toLowerCase()
-      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .replace(/^-|-$/g, '');
-  }
+  // Only use a slug we've actually verified exists on Cifra Club. Guessing a slug
+  // for an unverified song almost always 404s, so for those we skip the iframe
+  // entirely and go straight to the fallback sources instead.
+  const slug = CIFRA_SLUGS[songTitle] || null;
 
   // GuitarTuna slug (uses -chords suffix)
   const gtSlug = songTitle.toLowerCase()
@@ -1785,8 +1893,9 @@ function getChordUrls(songTitle) {
 
   return {
     cifraclub: {
-      url: `https://www.cifraclub.com.br/queen/${slug}/`,
-      searchUrl: searchUrl
+      url: slug ? `https://www.cifraclub.com.br/queen/${slug}/` : null,
+      searchUrl: searchUrl,
+      verified: !!slug
     },
     guitartuna: {
       url: `https://guitartuna.com/chords/queen/${gtSlug}-chords`,
@@ -1799,20 +1908,32 @@ function loadChordIframe(url, fallbackSearchUrl, guitartunaUrls) {
   const iframe = document.getElementById('svIframe');
   const loading = document.getElementById('svLoading');
   const error = document.getElementById('svIframeError');
+  const errorText = document.getElementById('svIframeErrorText');
 
   currentIframeUrl = url;
+
+  // Set fallback links
+  document.getElementById('svExternalLink').href = url || fallbackSearchUrl;
+  if (guitartunaUrls) {
+    document.getElementById('svGuitarTunaLink').href = guitartunaUrls.url;
+    document.getElementById('svGuitarTunaSearch').href = guitartunaUrls.searchUrl;
+  }
+
+  if (!url) {
+    // Not on Cifra Club (confirmed) - skip the iframe and show alternatives right away
+    loading.classList.add('hidden');
+    iframe.style.display = 'none';
+    iframe.src = '';
+    if (errorText) errorText.textContent = 'Esta canci\u00f3n no est\u00e1 disponible en Cifra Club.';
+    error.classList.add('active');
+    if (guitartunaUrls) openChordsInGuitarTuna(guitartunaUrls.url);
+    return;
+  }
 
   // Show loading, hide error, reset iframe visibility
   loading.classList.remove('hidden');
   error.classList.remove('active');
   iframe.style.display = '';
-
-  // Set fallback links
-  document.getElementById('svExternalLink').href = url;
-  if (guitartunaUrls) {
-    document.getElementById('svGuitarTunaLink').href = guitartunaUrls.url;
-    document.getElementById('svGuitarTunaSearch').href = guitartunaUrls.searchUrl;
-  }
 
   // Load iframe
   iframe.src = url;
@@ -1820,19 +1941,6 @@ function loadChordIframe(url, fallbackSearchUrl, guitartunaUrls) {
   iframe.onload = function() {
     loading.classList.add('hidden');
   };
-
-  // If song not in CIFRA_SLUGS, it might not exist - show GuitarTuna fallback after timeout
-  const songTitle = currentSong ? currentSong.track.title : '';
-  const isVerifiedSlug = CIFRA_SLUGS[songTitle];
-
-  if (!isVerifiedSlug && guitartunaUrls) {
-    // Song not verified on Cifra Club - auto-open GuitarTuna in popup after short delay
-    setTimeout(() => {
-      error.classList.add('active');
-      iframe.style.display = 'none';
-      openChordsInGuitarTuna(guitartunaUrls.url);
-    }, 2000);
-  }
 
   // Timeout: hide loading after 4s regardless
   setTimeout(() => {
