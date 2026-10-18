@@ -2,930 +2,421 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Queen Guitar Pro - Discografía Completa</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Queen Guitar Pro</title>
+<meta name="description" content="Acordes y pistas sin guitarra de toda la discografía de Queen, en una sola pantalla.">
+<meta name="theme-color" content="#000000">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Schibsted+Grotesk:wght@400;500;600&display=swap">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap');
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
   :root {
-    --gold: #C9A84C;
-    --gold-light: #E8D48B;
-    --gold-dark: #8B6914;
-    --black: #0A0A0A;
-    --dark: #141414;
-    --dark2: #1A1A1A;
-    --dark3: #222222;
-    --red: #8B0000;
-    --red-light: #C41E3A;
-    --white: #F5F0E8;
-    --gray: #888;
+    --bg: #000;
+    --surface: #15130f;
+    --raise: #201d18;
+    --line: #2e2a23;
+    --gold: #c9a24a;
+    --gold-hi: #e5c97a;
+    --text: #f2ede2;
+    --muted: #a39b8b;
+    --serif: 'Bodoni Moda', Didot, 'Bodoni 72', Georgia, serif;
+    --sans: 'Schibsted Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --bar: 64px;
+    --console: 384px;
+    --chart-crop: 140px;
   }
 
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { color-scheme: dark; -webkit-text-size-adjust: 100%; }
   body {
-    font-family: 'Inter', sans-serif;
-    background: var(--black);
-    color: var(--white);
+    background: var(--bg);
+    color: var(--text);
+    font: 400 15px/1.5 var(--sans);
+    -webkit-font-smoothing: antialiased;
     min-height: 100vh;
-    overflow-x: hidden;
   }
-
-  /* ===== HEADER ===== */
-  .header {
-    background: linear-gradient(180deg, var(--dark2) 0%, var(--black) 100%);
-    border-bottom: 2px solid var(--gold-dark);
-    padding: 20px 0;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-
-  .header-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
-
-  .queen-crest {
-    width: 70px;
-    height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-  }
-
-  .queen-crest svg { width: 100%; height: 100%; }
-
-  .header-title h1 {
-    font-family: 'Cinzel', serif;
-    font-size: 2.2em;
-    font-weight: 900;
-    background: linear-gradient(180deg, var(--gold-light) 0%, var(--gold) 50%, var(--gold-dark) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: 6px;
-    text-transform: uppercase;
-  }
-
-  .header-title p {
-    font-size: 0.85em;
-    color: var(--gray);
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-top: 2px;
-  }
-
-  .nav-back {
-    background: none;
-    border: 1px solid var(--gold-dark);
-    color: var(--gold);
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.85em;
-    transition: all 0.3s;
-    margin-left: auto;
-  }
-
-  .nav-back:hover {
-    background: var(--gold-dark);
-    color: var(--black);
-  }
-
-  .nav-back.hidden { display: none; }
-
-  /* ===== BREADCRUMB ===== */
-  .breadcrumb {
-    max-width: 1200px;
-    margin: 15px auto 0;
-    padding: 0 20px;
-    font-size: 0.8em;
-    color: var(--gray);
-  }
-
-  .breadcrumb span { cursor: pointer; transition: color 0.3s; }
-  .breadcrumb span:hover { color: var(--gold); }
-  .breadcrumb .sep { margin: 0 8px; color: var(--gold-dark); }
-  .breadcrumb .current { color: var(--gold); cursor: default; }
-
-  /* ===== MAIN CONTENT ===== */
-  .main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 30px 20px;
-  }
-
-  .section-title {
-    font-family: 'Cinzel', serif;
-    font-size: 1.4em;
-    color: var(--gold);
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-bottom: 25px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--gold-dark);
-  }
-
-  /* ===== ALBUM GRID ===== */
-  .album-type-section { margin-bottom: 40px; }
-
-  .album-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 25px;
-  }
-
-  .album-card {
-    background: var(--dark2);
-    border: 1px solid #2a2a2a;
-    border-radius: 8px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-  }
-
-  .album-card:hover {
-    transform: translateY(-5px);
-    border-color: var(--gold-dark);
-    box-shadow: 0 10px 30px rgba(201, 168, 76, 0.15);
-  }
-
-  .album-cover {
-    width: 100%;
-    aspect-ratio: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3em;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .album-cover-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-
-  .album-cover-placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 15px;
-    text-align: center;
-  }
-
-  .album-cover-placeholder .vinyl-icon {
-    font-size: 3em;
-    margin-bottom: 8px;
-  }
-
-  .album-cover-placeholder .album-name-cover {
-    font-family: 'Cinzel', serif;
-    font-size: 0.5em;
-    color: var(--white);
-    line-height: 1.2;
-    word-wrap: break-word;
-    padding: 0 5px;
-  }
-
-  .album-info {
-    padding: 12px 15px;
-    background: var(--dark);
-  }
-
-  .album-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 0.85em;
-    font-weight: 700;
-    color: var(--white);
-    margin-bottom: 4px;
-    line-height: 1.3;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    min-height: 2.6em;
-  }
-
-  .album-year {
-    font-size: 0.8em;
-    color: var(--gold);
-  }
-
-  .album-tracks-count {
-    font-size: 0.75em;
-    color: var(--gray);
-    margin-top: 2px;
-  }
-
-  /* ===== SONG LIST ===== */
-  .album-header-detail {
-    display: flex;
-    gap: 30px;
-    margin-bottom: 30px;
-    align-items: flex-start;
-  }
-
-  .album-header-cover {
-    width: 250px;
-    min-width: 250px;
-    aspect-ratio: 1;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 2px solid var(--gold-dark);
-  }
-
-  .album-header-cover .album-cover-placeholder {
-    font-size: 1.2em;
-  }
-
-  .album-header-info h2 {
-    font-family: 'Cinzel', serif;
-    font-size: 2em;
-    color: var(--gold);
-    margin-bottom: 8px;
-  }
-
-  .album-header-info .album-meta {
-    color: var(--gray);
-    font-size: 0.9em;
-    line-height: 1.8;
-  }
-
-  .album-header-info .album-meta strong { color: var(--gold-light); }
-
-  .song-list { list-style: none; }
-
-  .song-item {
-    display: flex;
-    align-items: center;
-    padding: 14px 20px;
-    border-bottom: 1px solid #1e1e1e;
-    cursor: pointer;
-    transition: all 0.2s;
-    border-radius: 4px;
-  }
-
-  .song-item:hover {
-    background: var(--dark2);
-    border-color: var(--gold-dark);
-  }
-
-  .song-number {
-    width: 35px;
-    font-size: 0.85em;
-    color: var(--gray);
-    font-weight: 600;
-  }
-
-  .song-title-text {
-    flex: 1;
-    font-size: 1em;
-    color: var(--white);
-  }
-
-  .song-duration {
-    color: var(--gray);
-    font-size: 0.85em;
-    margin-left: 15px;
-  }
-
-  .song-guitar-icon {
-    margin-left: 15px;
-    color: var(--gold);
-    font-size: 1.1em;
-    opacity: 0.7;
-  }
-
-  /* ===== FULLSCREEN SONG VIEW ===== */
-  .song-view {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--black);
-    z-index: 200;
-    display: none;
-    flex-direction: column;
-  }
-
-  .song-view.active { display: flex; }
-
-  .song-view-header {
-    background: linear-gradient(180deg, var(--dark2) 0%, var(--black) 100%);
-    border-bottom: 2px solid var(--gold-dark);
-    padding: 15px 25px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    flex-shrink: 0;
-  }
-
-  .song-view-close {
-    background: none;
-    border: 1px solid var(--gold-dark);
-    color: var(--gold);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 1.2em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s;
-  }
-
-  .song-view-close:hover {
-    background: var(--gold);
-    color: var(--black);
-  }
-
-  .song-view-title {
-    flex: 1;
-  }
-
-  .song-view-title h2 {
-    font-family: 'Cinzel', serif;
-    font-size: 1.3em;
-    color: var(--gold);
-  }
-
-  .song-view-title p {
-    font-size: 0.8em;
-    color: var(--gray);
-  }
-
-  .song-view-controls {
-    display: flex;
-    gap: 10px;
-  }
-
-  .control-btn {
-    background: var(--dark3);
-    border: 1px solid var(--gold-dark);
-    color: var(--gold);
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.82em;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .control-btn:hover {
-    background: var(--gold-dark);
-    color: var(--white);
-  }
-
-  .control-btn.active {
-    background: var(--gold);
-    color: var(--black);
-    border-color: var(--gold);
-  }
-
-  .song-view-body {
-    flex: 1;
-    display: flex;
-    overflow: hidden;
-  }
-
-  /* Left sidebar removed - only Cifra Club works in iframe */
-
-  /* === MAIN CONTENT: split chords + backing track === */
-  .sv-main {
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-    overflow: hidden;
-  }
-
-  /* Chord iframe container - crops Cifra Club's right sidebar (ads/videos) */
-  .sv-chords-panel {
-    flex: 1;
-    position: relative;
-    background: #f5f5f5;
-    overflow: hidden;
-  }
-
-  .sv-chords-panel iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: calc(100% + 500px);
-    height: 100%;
-    border: none;
-  }
-
-  .sv-iframe-loading {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: var(--dark);
-    color: var(--gray);
-    gap: 12px;
-    z-index: 2;
-    transition: opacity 0.5s;
-  }
-
-  .sv-iframe-loading.hidden { opacity: 0; pointer-events: none; }
-
-  .sv-iframe-error {
-    display: none;
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: var(--dark);
-    color: var(--gray);
-    gap: 15px;
-    padding: 30px;
-    text-align: center;
-    z-index: 3;
-  }
-
-  .sv-iframe-error.active { display: flex; }
-
-  /* Backing Track panel (right side) */
-  .sv-bt-panel {
-    width: 400px;
-    min-width: 400px;
-    background: var(--dark);
-    border-left: 1px solid var(--gold-dark);
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 0;
-  }
-
-  .sv-bt-panel.hidden { display: none; }
-
-  .sv-bt-header {
-    padding: 12px 15px;
-    border-bottom: 1px solid #2a2a2a;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .sv-bt-header h3 {
-    font-family: 'Cinzel', serif;
-    font-size: 0.85em;
-    color: var(--gold);
-    letter-spacing: 2px;
-  }
-
-  .sv-bt-toggle {
-    background: none;
-    border: 1px solid var(--gold-dark);
-    color: var(--gold);
-    width: 28px;
-    height: 28px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.8em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s;
-  }
-
-  .sv-bt-toggle:hover { background: var(--gold-dark); color: var(--white); }
-
-  .sv-bt-search {
-    padding: 12px;
-    border-bottom: 1px solid #2a2a2a;
-  }
-
-  .sv-bt-search .sv-yt-input { margin-bottom: 6px; }
-
-  .sv-bt-player {
-    background: #000;
-    padding: 8px;
-  }
-
-  .sv-bt-player iframe {
-    width: 100%;
-    aspect-ratio: 16/9;
-    border: none;
-    border-radius: 4px;
-  }
-
-  .sv-bt-results {
-    flex: 1;
-    overflow-y: auto;
-    padding: 8px;
-  }
-
-  .sv-bt-placeholder {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 30px 15px;
-    text-align: center;
-    color: var(--gray);
-    gap: 12px;
-  }
-
-  .sv-bt-placeholder .bt-icon { font-size: 2.5em; }
-  .sv-bt-placeholder p { font-size: 0.8em; line-height: 1.5; }
-  .sv-bt-placeholder .bt-hint { font-size: 0.7em; color: var(--gold-dark); }
-
-  .sv-iframe-error p { font-size: 0.9em; line-height: 1.5; }
-
-  /* Auto-scroll control */
-  .sv-scroll-control {
-    position: absolute;
-    bottom: 46px;
-    left: 10px;
-    z-index: 11;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(10,10,10,0.92);
-    border: 1px solid var(--gold-dark);
-    border-radius: 20px;
-    padding: 4px 10px;
-  }
-  .sv-scroll-btn {
-    background: var(--gold-dark);
-    color: var(--white);
-    border: none;
-    border-radius: 14px;
-    padding: 4px 12px;
-    font-size: 0.75em;
-    cursor: pointer;
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    transition: all 0.2s;
-  }
-  .sv-scroll-btn:hover { background: var(--gold); color: var(--black); }
-  .sv-scroll-btn.active { background: var(--red-light); color: white; }
-  .sv-scroll-speed-btn {
-    background: var(--dark3);
-    color: var(--gold);
-    border: 1px solid var(--gold-dark);
-    border-radius: 50%;
-    width: 22px;
-    height: 22px;
-    font-size: 0.85em;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-    padding: 0;
-  }
-  .sv-scroll-speed-btn:hover { background: var(--gold-dark); color: var(--black); }
-  .sv-scroll-speed {
-    color: var(--gold-light);
-    font-size: 0.75em;
-    font-weight: 700;
-    min-width: 14px;
-    text-align: center;
-  }
-
-  /* Persistent fallback bar at bottom of chords panel */
-  .sv-chords-fallback {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 10;
-    background: linear-gradient(0deg, rgba(20,20,20,0.97) 0%, rgba(20,20,20,0.92) 70%, rgba(20,20,20,0) 100%);
-    padding: 18px 16px 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  .sv-chords-fallback span {
-    color: var(--gold-light);
-    font-size: 0.8em;
-    font-weight: 600;
-    margin-right: 4px;
-  }
-  .sv-fallback-btn {
-    display: inline-block;
-    padding: 5px 12px;
-    border-radius: 4px;
-    font-size: 0.75em;
-    text-decoration: none;
-    color: var(--white);
-    background: var(--dark3);
-    border: 1px solid var(--gold-dark);
-    transition: all 0.2s;
-  }
-  .sv-fallback-btn:hover { background: var(--gold-dark); color: var(--black); }
-  .sv-fallback-btn.gt { border-color: #ff6600; }
-  .sv-fallback-btn.gt:hover { background: #ff6600; }
-  .sv-fallback-btn.google { border-color: #4285f4; }
-  .sv-fallback-btn.google:hover { background: #4285f4; }
-
-  .sv-open-external {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--gold-dark);
-    color: var(--white);
-    border: none;
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-size: 0.9em;
-    font-weight: 600;
-    cursor: pointer;
-    text-decoration: none;
-    font-family: 'Inter', sans-serif;
-    transition: background 0.3s;
-  }
-
-  .sv-open-external:hover { background: var(--gold); color: var(--black); }
-
-  /* Sidebar YouTube mini section */
-  .sv-yt-input {
-    width: 100%;
-    background: var(--dark3);
-    border: 1px solid #333;
-    color: var(--white);
-    padding: 6px 8px;
-    border-radius: 4px;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.75em;
-    margin-bottom: 6px;
-  }
-
-  .sv-yt-input:focus { outline: none; border-color: var(--gold); }
-
-  .sv-yt-btn {
-    width: 100%;
-    background: var(--dark3);
-    border: 1px solid var(--gold-dark);
-    color: var(--gold);
-    padding: 6px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.72em;
-    transition: all 0.3s;
-    margin-bottom: 4px;
-  }
-
-  .sv-yt-btn:hover { background: var(--gold-dark); color: var(--white); }
-  .sv-yt-btn.red { background: #CC0000; border-color: #CC0000; color: white; }
-  .sv-yt-btn.red:hover { background: #FF0000; }
-
-  /* Old YouTube panel and lyrics styles removed - now using sidebar + iframe layout */
-
-  /* ===== SEARCH BAR ===== */
-  .search-container {
-    margin-bottom: 25px;
-  }
-
-  .search-input {
-    width: 100%;
-    max-width: 500px;
-    background: var(--dark2);
-    border: 1px solid #333;
-    color: var(--white);
-    padding: 12px 20px;
-    border-radius: 30px;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.95em;
-  }
-
-  .search-input:focus {
-    outline: none;
-    border-color: var(--gold);
-    box-shadow: 0 0 15px rgba(201, 168, 76, 0.1);
-  }
-
-  .search-input::placeholder { color: #555; }
-
-  /* ===== EXTERNAL LINKS ===== */
-  .external-links {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
-    flex-wrap: wrap;
-  }
-
-  .ext-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--dark3);
-    border: 1px solid #333;
-    color: var(--gold);
-    padding: 8px 14px;
-    border-radius: 20px;
-    text-decoration: none;
-    font-size: 0.8em;
-    transition: all 0.3s;
-  }
-
-  .ext-link:hover {
-    border-color: var(--gold);
-    background: var(--gold-dark);
-    color: var(--white);
-  }
-
-  /* ===== LOADING OVERLAY ===== */
-  .loading-chords {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--gray);
-  }
-
-  .loading-chords .spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid var(--dark3);
-    border-top-color: var(--gold);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 15px;
-  }
-
+  body.locked { overflow: hidden; }
+  a { color: inherit; }
+  button, input { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  img { display: block; max-width: 100%; }
+  [hidden] { display: none !important; }
+  :focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 3px; }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+  .icon { width: 18px; height: 18px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    height: 38px; padding: 0 16px;
+    border: 1px solid var(--line); border-radius: 19px; background: none;
+    font-size: 14px; font-weight: 500; text-decoration: none; white-space: nowrap;
+    transition: border-color .15s, color .15s, background-color .15s;
+  }
+  .btn:hover { border-color: var(--gold); color: var(--gold-hi); }
+  .btn--solid { background: var(--gold); border-color: var(--gold); color: #000; font-weight: 600; }
+  .btn--solid:hover { background: var(--gold-hi); border-color: var(--gold-hi); color: #000; }
+  .btn:disabled { opacity: .35; cursor: default; pointer-events: none; }
+  .btn--block { width: 100%; }
+  .icon-btn {
+    display: grid; place-items: center; width: 38px; height: 38px; flex: none;
+    border: 1px solid var(--line); border-radius: 50%; background: none;
+    text-decoration: none; transition: border-color .15s, color .15s;
+  }
+  .icon-btn:hover:not(:disabled) { border-color: var(--gold); color: var(--gold-hi); }
+  .icon-btn:disabled { opacity: .3; cursor: default; }
+
+  /* ---------- Site header ---------- */
+  .site-head {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(0, 0, 0, .9);
+    backdrop-filter: saturate(140%) blur(10px);
+    -webkit-backdrop-filter: saturate(140%) blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .site-head__inner {
+    max-width: 1240px; height: var(--bar); margin: 0 auto; padding: 0 24px;
+    display: flex; align-items: center; gap: 24px;
+  }
+  .wordmark {
+    font-family: var(--serif); font-size: 23px; font-weight: 600; line-height: 1;
+    color: var(--gold-hi); text-decoration: none; white-space: nowrap;
+  }
+  .search { position: relative; margin-left: auto; width: min(380px, 52vw); }
+  .search .icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--muted); pointer-events: none; }
+  .search input {
+    width: 100%; height: 40px; padding: 0 16px 0 40px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 20px;
+    font-size: 14px;
+  }
+  .search input::placeholder { color: var(--muted); }
+  .search input:focus { outline: none; border-color: var(--gold); }
+  .search input::-webkit-search-cancel-button { filter: grayscale(1) brightness(1.6); }
+
+  /* ---------- Page ---------- */
+  .page { max-width: 1240px; margin: 0 auto; padding: 56px 24px 96px; }
+
+  .intro { margin-bottom: 72px; }
+  .intro h1 {
+    font-family: var(--serif); font-weight: 500;
+    font-size: clamp(44px, 7.4vw, 96px); line-height: .98; letter-spacing: -.015em;
+  }
+  .intro p { margin-top: 20px; max-width: 46ch; font-size: 18px; line-height: 1.55; color: var(--muted); }
+
+  .shelf + .shelf { margin-top: 80px; }
+  .shelf__head {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+    margin-bottom: 28px; padding-bottom: 12px; border-bottom: 1px solid var(--line);
+  }
+  .shelf__head h2 { font-family: var(--serif); font-style: italic; font-weight: 500; font-size: 32px; line-height: 1.1; }
+  .shelf__head span { font-size: 13px; color: var(--muted); }
+
+  .records {
+    list-style: none;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(176px, 1fr));
+    gap: 44px 28px;
+  }
+  .record { display: block; text-decoration: none; }
+  .sleeve {
+    position: relative; aspect-ratio: 1; overflow: hidden;
+    background: var(--raise);
+    box-shadow: 0 18px 30px -18px rgba(0, 0, 0, .9);
+    transition: transform .25s ease;
+  }
+  .sleeve img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .sleeve__fallback {
+    position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 14px;
+    font-family: var(--serif); font-size: 21px; line-height: 1.1;
+  }
+  .record:hover .sleeve, .record:focus-visible .sleeve { transform: translateY(-4px); }
+  .record__title { margin-top: 14px; font-family: var(--serif); font-size: 19px; font-weight: 500; line-height: 1.2; transition: color .15s; }
+  .record:hover .record__title { color: var(--gold-hi); }
+  .record__year { margin-top: 3px; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+  /* ---------- Song rows (album + search) ---------- */
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-bottom: 12px; font-size: 13px; color: var(--muted); }
+  .legend span { display: inline-flex; align-items: center; gap: 8px; }
+  .tracks { list-style: none; border-top: 1px solid var(--line); }
+  .track {
+    display: grid; grid-template-columns: 2.5rem minmax(0, 1fr) auto 3.25rem; align-items: center; gap: 12px;
+    min-height: 56px; padding: 8px 8px 8px 0;
+    border-bottom: 1px solid var(--line); text-decoration: none;
+    transition: background-color .15s;
+  }
+  .track:hover { background: var(--surface); }
+  .track:hover .track__title { color: var(--gold-hi); }
+  .track__n { text-align: right; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .track__title { font-size: 16px; line-height: 1.35; transition: color .15s; }
+  .track__sub { display: block; font-size: 13px; color: var(--muted); }
+  .track__tags { display: flex; gap: 6px; }
+  .track__time { text-align: right; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .tag {
+    display: inline-flex; align-items: center; height: 22px; padding: 0 9px;
+    border: 1px solid var(--line); border-radius: 11px;
+    font-size: 12px; color: var(--muted); white-space: nowrap;
+  }
+  .tag--track { border-color: rgba(201, 162, 74, .55); color: var(--gold-hi); }
+
+  /* ---------- Search results ---------- */
+  .results h1 { font-family: var(--serif); font-weight: 500; font-size: clamp(32px, 4.5vw, 48px); line-height: 1.05; margin-bottom: 8px; }
+  .results > p { color: var(--muted); margin-bottom: 40px; }
+  .results h2 { font-family: var(--serif); font-style: italic; font-weight: 500; font-size: 26px; margin: 48px 0 16px; }
+  .results .records { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  .empty { padding: 48px 0; color: var(--muted); font-size: 17px; max-width: 48ch; }
+
+  /* ---------- Album page ---------- */
+  .back {
+    display: inline-flex; align-items: center; gap: 6px; margin-bottom: 36px;
+    font-size: 14px; color: var(--muted); text-decoration: none;
+  }
+  .back:hover { color: var(--text); }
+  .album { display: grid; grid-template-columns: minmax(220px, 340px) minmax(0, 1fr); gap: 56px; align-items: start; }
+  .album__art { position: sticky; top: calc(var(--bar) + 32px); }
+  .album__art .sleeve { box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 1); }
+  .album__art .sleeve__fallback { font-size: 32px; padding: 22px; }
+  .album h1 { font-family: var(--serif); font-weight: 500; font-size: clamp(38px, 5.4vw, 66px); line-height: 1.02; letter-spacing: -.01em; }
+  .album__meta { margin-top: 14px; color: var(--muted); font-size: 15px; }
+  .album__listen { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 44px; }
+
+  .site-foot { max-width: 1240px; margin: 0 auto; padding: 32px 24px 48px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+
+  /* ---------- Practice room ---------- */
+  .room {
+    position: fixed; inset: 0; z-index: 50; background: var(--bg);
+    display: grid; grid-template-rows: var(--bar) minmax(0, 1fr);
+  }
+  .room__bar { display: flex; align-items: center; gap: 14px; padding: 0 16px; border-bottom: 1px solid var(--line); min-width: 0; }
+  .room__heading { min-width: 0; flex: 1; }
+  .room__heading h1 {
+    font-family: var(--serif); font-weight: 500; font-size: 24px; line-height: 1.15;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .room__heading p { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .room__nav { display: flex; align-items: center; gap: 8px; }
+  .room__body { display: grid; grid-template-columns: minmax(0, 1fr) var(--console); min-height: 0; }
+
+  .chart { position: relative; min-height: 0; background: var(--bg); overflow-y: auto; overscroll-behavior: contain; }
+  .chart iframe {
+    display: block; width: min(100%, 900px); height: 14000px;
+    margin: calc(var(--chart-crop) * -1) auto 0; border: 0;
+  }
+  .chart__state {
+    position: absolute; inset: 0; z-index: 1;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+    padding: 32px; text-align: center;
+  }
+  .chart__state--loading { background: var(--bg); color: var(--muted); font-size: 14px; }
+  .chart__state--missing { background: var(--surface); }
+  .chart__state h2 { font-family: var(--serif); font-weight: 500; font-size: 30px; line-height: 1.15; max-width: 18ch; }
+  .chart__state p { max-width: 40ch; color: var(--muted); }
+  .chart__state .row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 6px; }
+  .spinner { width: 28px; height: 28px; border: 2px solid var(--line); border-top-color: var(--gold); border-radius: 50%; animation: spin .9s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ===== SCROLL BAR ===== */
-  ::-webkit-scrollbar { width: 8px; }
-  ::-webkit-scrollbar-track { background: var(--dark); }
-  ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+  .console { min-height: 0; overflow-y: auto; background: var(--surface); border-left: 1px solid var(--line); }
+  .console section { padding: 20px; border-bottom: 1px solid var(--line); }
+  .console h2 { font-size: 14px; font-weight: 600; margin-bottom: 12px; }
+  .console .note { margin-top: 10px; font-size: 13px; line-height: 1.5; color: var(--muted); }
+  .console .row { display: flex; flex-wrap: wrap; gap: 8px; }
 
-  /* ===== RESPONSIVE ===== */
+  .player { position: relative; aspect-ratio: 16 / 9; background: #000; border: 1px solid var(--line); overflow: hidden; }
+  .player iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .player__empty {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 6px; padding: 20px; text-align: center; font-size: 14px; color: var(--muted);
+  }
+  .player__empty strong { font-family: var(--serif); font-weight: 500; font-size: 20px; color: var(--text); }
+
+  .scroller { display: flex; align-items: center; gap: 10px; }
+  .scroller .btn { flex: 1; }
+  .stepper { display: flex; align-items: center; gap: 6px; }
+  .stepper output { min-width: 2ch; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .check { display: flex; align-items: center; gap: 10px; margin-top: 14px; font-size: 14px; cursor: pointer; }
+  .check input { width: 16px; height: 16px; accent-color: var(--gold); }
+
+  .field { display: flex; gap: 8px; margin-top: 10px; }
+  .field input {
+    flex: 1; min-width: 0; height: 38px; padding: 0 14px;
+    background: var(--bg); border: 1px solid var(--line); border-radius: 19px; font-size: 14px;
+  }
+  .field input::placeholder { color: var(--muted); }
+  .field input:focus { outline: none; border-color: var(--gold); }
+  .field-error { margin-top: 8px; font-size: 13px; color: #e8a08a; }
+  .linkish { background: none; border: 0; padding: 0; color: var(--gold-hi); text-decoration: underline; text-underline-offset: 3px; font-size: 13px; }
+
+  /* ---------- Responsive ---------- */
+  .more-toggle { display: none; }
+
   @media (max-width: 900px) {
-    .album-header-detail { flex-direction: column; align-items: center; text-align: center; }
-    .album-header-cover { width: 200px; min-width: 200px; }
-    .sv-bt-panel { width: 300px; min-width: 300px; }
-    .song-view-controls { flex-wrap: wrap; }
-    .header-title h1 { font-size: 1.5em; }
-    .album-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+    .album { grid-template-columns: 1fr; gap: 32px; }
+    .album__art { position: static; width: min(260px, 70vw); }
+    .room__body { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); }
+    .console {
+      order: -1; max-height: 60vh; border-left: 0; border-bottom: 1px solid var(--line);
+      display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); align-content: start;
+    }
+    .console section { padding: 14px 16px; }
+    .console > section:first-child { grid-row: span 2; border-right: 1px solid var(--line); }
+    .console__more { display: none; grid-column: 1 / -1; }
+    .console.show-more .console__more { display: block; }
+    .more-toggle {
+      display: flex; align-items: center; padding: 0 16px; min-height: 48px;
+      background: none; border: 0; border-bottom: 1px solid var(--line);
+      font-size: 14px; color: var(--gold-hi); text-align: left;
+    }
   }
-
-  @media (max-width: 600px) {
-    .header-content { flex-wrap: wrap; }
-    .queen-crest { width: 50px; height: 50px; }
-    .header-title h1 { font-size: 1.2em; letter-spacing: 3px; }
-    .album-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; }
-    .song-view-header { padding: 10px 15px; flex-wrap: wrap; }
+  @media (max-width: 640px) {
+    .console { grid-template-columns: 1fr; }
+    .console > section:first-child { grid-row: auto; border-right: 0; padding-bottom: 0; border-bottom: 0; }
+    .console h2 { display: none; }
+    .console .check { margin-top: 10px; }
   }
-
-  /* ===== INTRO ANIMATION ===== */
-  .fade-in { animation: fadeIn 0.4s ease-out; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-  /* Tuning info box */
-  .tuning-info {
-    background: var(--dark2);
-    border: 1px solid var(--gold-dark);
-    border-radius: 8px;
-    padding: 15px 20px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  @media (max-width: 640px) {
+    :root { --bar: 56px; }
+    .site-head__inner { padding: 0 16px; gap: 12px; }
+    .wordmark { font-size: 19px; }
+    .page { padding: 36px 16px 72px; }
+    .intro { margin-bottom: 48px; }
+    .intro p { font-size: 16px; }
+    .records { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 16px; }
+    .record__title { font-size: 17px; }
+    .track { grid-template-columns: 1.75rem minmax(0, 1fr) auto; gap: 10px; }
+    .track__time { display: none; }
+    .room__bar { padding: 0 10px; gap: 10px; }
+    .room__heading h1 { font-size: 19px; }
+    .room__cifra { display: none; }
+    .site-foot { padding: 24px 16px 40px; }
   }
-  .tuning-info .icon { font-size: 1.5em; }
-  .tuning-info .text { font-size: 0.85em; color: var(--gray); line-height: 1.5; }
-  .tuning-info .text strong { color: var(--gold); }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation-duration: .01ms !important; }
+  }
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-content">
-    <div class="queen-crest">
-      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="goldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style="stop-color:#E8D48B"/>
-            <stop offset="50%" style="stop-color:#C9A84C"/>
-            <stop offset="100%" style="stop-color:#8B6914"/>
-          </linearGradient>
-        </defs>
-        <!-- Crown -->
-        <path d="M50 8 L62 28 L78 12 L72 35 L92 25 L78 45 L50 38 L22 45 L8 25 L28 35 L22 12 L38 28 Z" fill="url(#goldGrad)" stroke="#8B6914" stroke-width="1"/>
-        <!-- Shield -->
-        <path d="M25 45 L75 45 L75 72 Q75 90 50 95 Q25 90 25 72 Z" fill="none" stroke="url(#goldGrad)" stroke-width="2.5"/>
-        <!-- Q letter -->
-        <text x="50" y="78" text-anchor="middle" font-family="Cinzel, serif" font-size="32" font-weight="900" fill="url(#goldGrad)">Q</text>
-        <!-- Lions -->
-        <text x="14" y="72" font-size="18">🦁</text>
-        <text x="72" y="72" font-size="18">🦁</text>
-      </svg>
-    </div>
-    <div class="header-title">
-      <h1>Queen</h1>
-      <p>Guitar Pro - Discografía</p>
-    </div>
-    <button class="nav-back hidden" id="navBack" onclick="goBack()">← Volver</button>
-  </div>
-  <div class="breadcrumb" id="breadcrumb">
-    <span class="current">Discografía</span>
-  </div>
-</div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
+  <symbol id="i-next" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-out" viewBox="0 0 24 24"><path d="M14 5h5v5M19 5l-8 8M18 14v4a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h4"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M6 12h12"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></symbol>
+</svg>
 
-<div class="main" id="mainContent"></div>
-
-<!-- Fullscreen Song View -->
-<div class="song-view" id="songView">
-  <div class="song-view-header">
-    <button class="song-view-close" onclick="closeSongView()">✕</button>
-    <div class="song-view-title">
-      <h2 id="svTitle"></h2>
-      <p id="svAlbum"></p>
-    </div>
-    <a id="svExternalLink" href="#" target="_blank" class="control-btn" title="Abrir acordes en Cifra Club">🎶 Cifra Club ↗</a>
-    <a id="svGuitarTunaBtn" href="#" onclick="event.preventDefault(); openChordsInGuitarTuna(this.href);" class="control-btn" title="Abrir acordes en GuitarTuna" style="margin-left:4px; background:var(--dark3); font-size:0.75em;">🎵 GuitarTuna ↗</a>
+<header class="site-head">
+  <div class="site-head__inner">
+    <a class="wordmark" href="#/">Queen Guitar Pro</a>
+    <label class="search">
+      <span class="sr-only">Buscar canción o disco</span>
+      <svg class="icon"><use href="#i-search"/></svg>
+      <input type="search" id="search" placeholder="Canción o disco" autocomplete="off">
+    </label>
   </div>
-  <div class="song-view-body">
-    <!-- MAIN AREA: chords (Cifra Club) + backing track panel -->
-    <div class="sv-main" id="svMain">
-      <!-- CHORDS PANEL (iframe, cropped to hide Cifra Club's right sidebar) -->
-      <div class="sv-chords-panel" id="svChordsPanel">
-        <div class="sv-iframe-loading" id="svLoading">
-          <div class="spinner"></div>
-          <p>Cargando acordes...</p>
-        </div>
-        <iframe id="svIframe" sandbox="allow-scripts allow-forms allow-same-origin" loading="eager"></iframe>
-        <div class="sv-iframe-error" id="svIframeError">
-          <p style="font-size:1.5em;">🎸</p>
-          <p id="svIframeErrorText">No se encontraron los acordes en Cifra Club.</p>
-          <p style="margin-top:12px;">Prueba en otra fuente:</p>
-          <a id="svGuitarTunaLink" href="#" onclick="event.preventDefault(); openChordsInGuitarTuna(this.href);" class="sv-yt-btn red" style="display:inline-block; margin-top:8px; padding:10px 20px; text-decoration:none; font-size:0.9em; cursor:pointer;">🎵 Abrir en GuitarTuna</a>
-          <a id="svGuitarTunaSearch" href="#" target="_blank" class="sv-yt-btn" style="display:inline-block; margin-top:6px; padding:8px 16px; text-decoration:none; font-size:0.8em;">🔍 Buscar en Google → GuitarTuna</a>
-        </div>
-        <!-- Auto-scroll control bar -->
-        <div class="sv-scroll-control" id="svScrollControl">
-          <button class="sv-scroll-btn" id="svScrollToggle" onclick="toggleAutoScroll()" title="Iniciar/pausar auto-scroll">▶ Scroll</button>
-          <button class="sv-scroll-speed-btn" onclick="changeScrollSpeed(-1)" title="Más lento">−</button>
-          <span class="sv-scroll-speed" id="svScrollSpeed">3</span>
-          <button class="sv-scroll-speed-btn" onclick="changeScrollSpeed(1)" title="Más rápido">+</button>
-        </div>
-        <!-- Persistent fallback bar - always visible at bottom of chords panel -->
-        <div class="sv-chords-fallback" id="svChordsFallback">
-          <span>¿No se ven los acordes?</span>
-          <a id="svFallbackCifra" href="#" target="_blank" class="sv-fallback-btn">Cifra Club ↗</a>
-          <a id="svFallbackGT" href="#" onclick="event.preventDefault(); openChordsInGuitarTuna(this.href);" class="sv-fallback-btn gt">GuitarTuna ↗</a>
-          <a id="svFallbackGoogle" href="#" target="_blank" class="sv-fallback-btn google">Google ↗</a>
+</header>
+
+<main class="page" id="page"></main>
+
+<footer class="site-foot">
+  Acordes de Cifra Club. Pistas sin guitarra alojadas en YouTube. Proyecto personal de práctica, sin relación con Queen.
+</footer>
+
+<!-- Practice room -->
+<div class="room" id="room" role="dialog" aria-modal="true" aria-labelledby="roomTitle" hidden>
+  <div class="room__bar">
+    <a class="icon-btn" id="roomClose" href="#/" aria-label="Volver al disco" title="Volver al disco (Esc)">
+      <svg class="icon"><use href="#i-close"/></svg>
+    </a>
+    <div class="room__heading">
+      <h1 id="roomTitle"></h1>
+      <p id="roomSub"></p>
+    </div>
+    <div class="room__nav">
+      <a class="btn room__cifra" id="roomCifra" href="#" target="_blank" rel="noopener">
+        Abrir en Cifra Club <svg class="icon" style="width:15px;height:15px"><use href="#i-out"/></svg>
+      </a>
+      <a class="icon-btn" id="roomPrev" href="#" aria-label="Canción anterior"><svg class="icon"><use href="#i-back"/></svg></a>
+      <a class="icon-btn" id="roomNext" href="#" aria-label="Canción siguiente"><svg class="icon"><use href="#i-next"/></svg></a>
+    </div>
+  </div>
+
+  <div class="room__body">
+    <div class="chart" id="chart">
+      <div class="chart__state chart__state--loading" id="chartLoading">
+        <div class="spinner" aria-hidden="true"></div>
+        <p>Cargando acordes de Cifra Club</p>
+      </div>
+      <div class="chart__state chart__state--missing" id="chartMissing" hidden>
+        <h2>Cifra Club no tiene esta canción</h2>
+        <p>Suele pasar con instrumentales y fragmentos en directo. Puedes buscar los acordes en otra web:</p>
+        <div class="row">
+          <a class="btn btn--solid" id="missingUG" href="#" target="_blank" rel="noopener">Buscar en Ultimate Guitar</a>
+          <a class="btn" id="missingGoogle" href="#" target="_blank" rel="noopener">Buscar en Google</a>
         </div>
       </div>
-      <!-- BACKING TRACK PANEL (right side) -->
-      <div class="sv-bt-panel" id="svBtPanel">
-        <div class="sv-bt-header">
-          <h3>🎸 BACKING TRACK</h3>
-          <button class="sv-bt-toggle" onclick="toggleBtPanel()" title="Ocultar/mostrar panel">◀</button>
-        </div>
-        <div class="sv-bt-search">
-          <input type="text" class="sv-yt-input" id="btSearchInput" placeholder="Buscar backing track...">
-          <div style="display:flex; gap:4px;">
-            <button class="sv-yt-btn" onclick="searchBackingTrack()" style="flex:1;">🔍 Buscar</button>
-            <button class="sv-yt-btn" onclick="toggleBtUrlInput()" style="flex:1;">📋 Pegar URL</button>
-          </div>
-          <div id="btUrlSection" style="display:none; margin-top:6px;">
-            <input type="text" class="sv-yt-input" id="btVideoUrl" placeholder="Pega URL de YouTube..." onkeydown="if(event.key==='Enter')loadBackingTrack()">
-            <button class="sv-yt-btn red" onclick="loadBackingTrack()">▶ Reproducir</button>
-          </div>
-        </div>
-        <div id="btPlayer" style="display:none; padding:10px 12px; border-bottom:1px solid #2a2a2a; text-align:center;">
-          <span id="btNowPlaying" style="font-size:0.78em; color:var(--gold);"></span>
-        </div>
-        <div class="sv-bt-results" id="btResults">
-          <div class="sv-bt-placeholder">
-            <div class="bt-icon">🎵</div>
-            <p>Busca una backing track sin guitarra para practicar junto con los acordes</p>
-            <p class="bt-hint">Haz clic en "Buscar" para encontrar backing tracks en YouTube, luego pega la URL del vídeo que elijas</p>
-          </div>
-        </div>
-      </div>
+      <iframe id="chartFrame" title="Acordes" sandbox="allow-scripts allow-forms allow-same-origin" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
+
+    <aside class="console" aria-label="Pista y controles">
+      <section>
+        <h2>Pista sin guitarra</h2>
+        <div class="player">
+          <div id="ytMount"></div>
+          <div class="player__empty" id="playerEmpty" hidden>
+            <strong>Sin pista todavía</strong>
+            <span id="playerEmptyText">Busca una en YouTube y pega aquí el enlace.</span>
+          </div>
+        </div>
+        <p class="note" id="trackNote"></p>
+      </section>
+
+      <section>
+        <h2>Desplazamiento de los acordes</h2>
+        <div class="scroller">
+          <button class="btn btn--solid" id="scrollToggle" type="button">Desplazar</button>
+          <div class="stepper" role="group" aria-label="Velocidad">
+            <button class="icon-btn" id="speedDown" type="button" aria-label="Más lento"><svg class="icon"><use href="#i-minus"/></svg></button>
+            <output id="speed" aria-live="polite">3</output>
+            <button class="icon-btn" id="speedUp" type="button" aria-label="Más rápido"><svg class="icon"><use href="#i-plus"/></svg></button>
+          </div>
+        </div>
+        <label class="check"><input type="checkbox" id="syncScroll" checked> Desplazar al reproducir la pista</label>
+      </section>
+
+      <button class="more-toggle" id="moreToggle" type="button" aria-expanded="false" aria-controls="consoleMore">Cambiar la pista y otras webs de acordes</button>
+
+      <div class="console__more" id="consoleMore">
+      <section>
+        <h2>Cambiar la pista</h2>
+        <a class="btn btn--block" id="ytSearch" href="#" target="_blank" rel="noopener">
+          Buscar en YouTube <svg class="icon" style="width:15px;height:15px"><use href="#i-out"/></svg>
+        </a>
+        <form class="field" id="trackForm">
+          <label class="sr-only" for="trackUrl">Enlace del vídeo de YouTube</label>
+          <input id="trackUrl" type="text" inputmode="url" autocomplete="off" spellcheck="false" placeholder="Pega el enlace del vídeo">
+          <button class="btn" type="submit">Usar</button>
+        </form>
+        <p class="field-error" id="trackError" hidden>Ese enlace no es de un vídeo de YouTube. Copia la dirección completa del vídeo.</p>
+        <p class="note">La pista que elijas se guarda en este navegador para la próxima vez.</p>
+      </section>
+
+      <section>
+        <h2>Otras webs de acordes</h2>
+        <div class="row">
+          <a class="btn" id="otherUG" href="#" target="_blank" rel="noopener">Ultimate Guitar</a>
+          <a class="btn" id="otherGoogle" href="#" target="_blank" rel="noopener">Google</a>
+        </div>
+      </section>
+      </div>
+    </aside>
   </div>
 </div>
 
 <script>
-// ===== QUEEN COMPLETE DISCOGRAPHY DATA =====
+// ===== DATA =====
 const DISCOGRAPHY = {
   studio: [
     {
@@ -1433,285 +924,6 @@ const DISCOGRAPHY = {
   ]
 };
 
-// ===== APP STATE =====
-let currentView = 'albums'; // 'albums' | 'songs' | 'song'
-let currentAlbum = null;
-let currentSong = null;
-let currentVideoId = '';
-let currentVideoTitle = '';
-
-// ===== RENDER FUNCTIONS =====
-
-function renderAlbums() {
-  currentView = 'albums';
-  currentAlbum = null;
-  document.getElementById('navBack').classList.add('hidden');
-  document.getElementById('breadcrumb').innerHTML = '<span class="current">Discografía</span>';
-
-  const main = document.getElementById('mainContent');
-  let html = '';
-
-  // Search bar
-  html += `<div class="search-container">
-    <input type="text" class="search-input" placeholder="🔍 Buscar álbum o canción..." oninput="filterAlbums(this.value)" id="searchInput">
-  </div>`;
-
-  // Studio albums
-  html += `<div class="album-type-section" id="studioSection">
-    <h2 class="section-title">Álbumes de Estudio</h2>
-    <div class="album-grid">`;
-
-  DISCOGRAPHY.studio.forEach(album => {
-    html += renderAlbumCard(album);
-  });
-
-  html += `</div></div>`;
-
-  // Live albums
-  html += `<div class="album-type-section" id="liveSection">
-    <h2 class="section-title">Álbumes en Directo</h2>
-    <div class="album-grid">`;
-
-  DISCOGRAPHY.live.forEach(album => {
-    html += renderAlbumCard(album);
-  });
-
-  html += `</div></div>`;
-
-  main.innerHTML = html;
-  main.classList.add('fade-in');
-}
-
-function renderAlbumCard(album) {
-  const cardId = `card-${album.id}`;
-  const artUrl = ALBUM_ART[album.id] || '';
-  const imgHtml = artUrl
-    ? `<img class="album-cover-img" src="${artUrl}" alt="${album.name}" loading="lazy" onerror="this.style.display='none'">`
-    : '';
-
-  return `<div class="album-card" onclick="openAlbum('${album.id}')" id="${cardId}">
-    <div class="album-cover">
-      <div class="album-cover-placeholder" style="background: ${album.gradient};">
-        <div class="vinyl-icon">💿</div>
-        <div class="album-name-cover">${album.name}</div>
-      </div>
-      ${imgHtml}
-    </div>
-    <div class="album-info">
-      <div class="album-name">${album.name}</div>
-      <div class="album-year">${album.year}</div>
-      <div class="album-tracks-count">${album.tracks.length} temas</div>
-    </div>
-  </div>`;
-}
-
-function openAlbum(albumId) {
-  const allAlbums = [...DISCOGRAPHY.studio, ...DISCOGRAPHY.live];
-  const album = allAlbums.find(a => a.id === albumId);
-  if (!album) return;
-
-  currentAlbum = album;
-  currentView = 'songs';
-  document.getElementById('navBack').classList.remove('hidden');
-  document.getElementById('breadcrumb').innerHTML = `<span onclick="renderAlbums()">Discografía</span><span class="sep">›</span><span class="current">${album.name}</span>`;
-
-  const isLive = DISCOGRAPHY.live.some(a => a.id === albumId);
-  const albumType = isLive ? 'En Directo' : 'Álbum de Estudio';
-  const totalDuration = calculateTotalDuration(album.tracks);
-
-  const artUrl = ALBUM_ART[album.id] || '';
-  const coverContent = artUrl
-    ? `<img src="${artUrl}" alt="${album.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.outerHTML='<div class=\\'album-cover-placeholder\\' style=\\'background:${album.gradient}\\'><div class=\\'vinyl-icon\\'>💿</div><div class=\\'album-name-cover\\' style=\\'font-size:1em\\'>${album.name}</div></div>'">`
-    : `<div class="album-cover-placeholder" style="background: ${album.gradient};"><div class="vinyl-icon">💿</div><div class="album-name-cover" style="font-size:1em;">${album.name}</div></div>`;
-
-  let html = `<div class="fade-in">
-    <div class="album-header-detail">
-      <div class="album-header-cover">
-        ${coverContent}
-      </div>
-      <div class="album-header-info">
-        <h2>${album.name}</h2>
-        <div class="album-meta">
-          <strong>Año:</strong> ${album.year}<br>
-          <strong>Tipo:</strong> ${albumType}<br>
-          <strong>Canciones:</strong> ${album.tracks.length}<br>
-          <strong>Duración total:</strong> ~${totalDuration}
-        </div>
-        <div class="external-links">
-          <a class="ext-link" href="https://www.youtube.com/results?search_query=Queen+${encodeURIComponent(album.name)}+full+album" target="_blank">▶️ YouTube</a>
-          <a class="ext-link" href="https://open.spotify.com/search/Queen%20${encodeURIComponent(album.name)}" target="_blank">🎧 Spotify</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="tuning-info">
-      <div class="icon">🎸</div>
-      <div class="text">
-        <strong>Afinación de Brian May:</strong> Estándar (E A D G B E). Brian usaba su Red Special con un sixpence como púa y el Vox AC30 para su tono característico.
-      </div>
-    </div>
-
-    <ul class="song-list">`;
-
-  album.tracks.forEach((track, i) => {
-    const hasBt = BACKING_TRACKS[track.title] ? '<span title="Backing track disponible" style="color:#8BC34A; margin-left:8px; font-size:0.8em;">▶ BT</span>' : '';
-    html += `<li class="song-item" onclick="openSong('${album.id}', ${i})">
-      <span class="song-number">${i + 1}</span>
-      <span class="song-title-text">${track.title}${hasBt}</span>
-      <span class="song-duration">${track.duration}</span>
-      <span class="song-guitar-icon">🎸</span>
-    </li>`;
-  });
-
-  html += `</ul></div>`;
-
-  document.getElementById('mainContent').innerHTML = html;
-}
-
-function openSong(albumId, trackIndex) {
-  // Reset auto-scroll from previous song
-  resetAutoScroll();
-  // Don't close or null windows - just let them be reused by the backing track functions
-
-  const allAlbums = [...DISCOGRAPHY.studio, ...DISCOGRAPHY.live];
-  const album = allAlbums.find(a => a.id === albumId);
-  if (!album) return;
-
-  const track = album.tracks[trackIndex];
-  currentSong = { album, track, trackIndex };
-  currentView = 'song';
-
-  document.getElementById('svTitle').textContent = track.title;
-  document.getElementById('svAlbum').textContent = `${album.name} (${album.year})`;
-
-  // Detect if this is a live album
-  const isLive = DISCOGRAPHY.live.some(a => a.id === albumId);
-
-  // Build context-aware search query
-  let searchQuery;
-  if (isLive) {
-    // For live albums, search for the live version
-    const liveInfo = album.name.replace(/^(Live |Queen )/, '').replace(/'/g, '');
-    searchQuery = `Queen ${track.title} live backing track no guitar ${liveInfo}`;
-  } else {
-    searchQuery = `Queen ${track.title} backing track no guitar`;
-  }
-  document.getElementById('btSearchInput').value = searchQuery;
-  document.getElementById('btUrlSection').style.display = 'none';
-  document.getElementById('btPlayer').style.display = 'none';
-  document.getElementById('btNowPlaying').textContent = '';
-
-  // Auto-play backing track when selecting a song
-  // For studio albums with pre-loaded track: play immediately
-  // For live albums: open YouTube search in popup automatically
-  // For songs without pre-loaded track: open YouTube search in popup automatically
-  const btVideoId = !isLive ? BACKING_TRACKS[track.title] : null;
-  if (btVideoId) {
-    // Auto-play the pre-loaded backing track immediately
-    setTimeout(() => playBackingTrackVideo(btVideoId), 300);
-  } else if (isLive) {
-    // Auto-open YouTube search for the live version in popup
-    setTimeout(() => searchBackingTrackInPopup(searchQuery), 300);
-  } else {
-    // Auto-open YouTube search for studio version in popup
-    setTimeout(() => searchBackingTrackInPopup(searchQuery), 300);
-  }
-
-  // Load Cifra Club directly (only source that works in iframe)
-  const sources = getChordUrls(track.title);
-  loadChordIframe(sources.cifraclub.url, sources.cifraclub.searchUrl, sources.guitartuna);
-
-  // Set GuitarTuna header button link
-  document.getElementById('svGuitarTunaBtn').href = sources.guitartuna.url;
-
-  // Set fallback bar links
-  document.getElementById('svFallbackCifra').href = sources.cifraclub.url || sources.cifraclub.searchUrl;
-  document.getElementById('svFallbackGT').href = sources.guitartuna.url;
-  document.getElementById('svFallbackGoogle').href = `https://www.google.com/search?q=${encodeURIComponent('Queen ' + track.title + ' chords guitar')}`;
-
-  // Show the fullscreen view
-  document.getElementById('songView').classList.add('active');
-  document.body.style.overflow = 'hidden';
-
-  // Update breadcrumb
-  document.getElementById('breadcrumb').innerHTML =
-    `<span onclick="renderAlbums()">Discografía</span><span class="sep">›</span><span onclick="closeSongView(); openAlbum('${album.id}')">${album.name}</span><span class="sep">›</span><span class="current">${track.title}</span>`;
-}
-
-// ===== AUTO-SCROLL =====
-let autoScrollActive = false;
-let autoScrollSpeed = 3; // 1-5 scale
-let autoScrollInterval = null;
-
-function toggleAutoScroll() {
-  autoScrollActive = !autoScrollActive;
-  const btn = document.getElementById('svScrollToggle');
-  if (autoScrollActive) {
-    btn.textContent = '⏸ Scroll';
-    btn.classList.add('active');
-    startAutoScroll();
-    // Also bring YouTube window to focus so both start together
-    if (btWindow && !btWindow.closed) {
-      btWindow.focus();
-    }
-  } else {
-    btn.textContent = '▶ Scroll';
-    btn.classList.remove('active');
-    stopAutoScroll();
-  }
-}
-
-function startAutoScroll() {
-  stopAutoScroll();
-  // Speed: 1=very slow, 3=normal, 5=fast
-  // Scroll the iframe's parent container (sv-chords-panel)
-  const panel = document.getElementById('svChordsPanel');
-  const iframe = document.getElementById('svIframe');
-  // Since we can't scroll inside the iframe (cross-origin), we scroll the iframe itself
-  // by moving its top position gradually
-  // Speed 1-10: calculate px per tick with smooth curve
-  const pxPerTick = 0.03 + (autoScrollSpeed - 1) * 0.05;
-
-  autoScrollInterval = setInterval(() => {
-    if (!autoScrollActive) { stopAutoScroll(); return; }
-    const currentTop = parseFloat(iframe.style.top) || 0;
-    iframe.style.top = (currentTop - pxPerTick) + 'px';
-  }, 30);
-}
-
-function stopAutoScroll() {
-  if (autoScrollInterval) {
-    clearInterval(autoScrollInterval);
-    autoScrollInterval = null;
-  }
-}
-
-function changeScrollSpeed(delta) {
-  autoScrollSpeed = Math.max(1, Math.min(10, autoScrollSpeed + delta));
-  document.getElementById('svScrollSpeed').textContent = autoScrollSpeed;
-  // If scrolling is active, restart with new speed
-  if (autoScrollActive) {
-    startAutoScroll();
-  }
-}
-
-function resetAutoScroll() {
-  autoScrollActive = false;
-  stopAutoScroll();
-  const btn = document.getElementById('svScrollToggle');
-  if (btn) {
-    btn.textContent = '▶ Scroll';
-    btn.classList.remove('active');
-  }
-  // Reset iframe position
-  const iframe = document.getElementById('svIframe');
-  if (iframe) iframe.style.top = '0px';
-}
-
-// ===== CHORD IFRAME & SOURCES =====
-let chordsWindow = null;
-let currentIframeUrl = '';
-
 // Known correct Cifra Club slugs (their slugs don't always match the song title).
 // Built from Cifra Club's own Queen catalog (225 songs), not guessed — covers ~155
 // of the ~188 distinct tracks in the discography below. The remainder are mostly
@@ -1874,346 +1086,6 @@ const CIFRA_SLUGS = {
   "You're My Best Friend": "youre-my-best-friend"
 };
 
-function getChordUrls(songTitle) {
-  const qFull = encodeURIComponent('Queen ' + songTitle);
-  const searchUrl = `https://www.cifraclub.com.br/?q=${qFull}`;
-
-  // Only use a slug we've actually verified exists on Cifra Club. Guessing a slug
-  // for an unverified song almost always 404s, so for those we skip the iframe
-  // entirely and go straight to the fallback sources instead.
-  const slug = CIFRA_SLUGS[songTitle] || null;
-
-  // GuitarTuna slug (uses -chords suffix)
-  const gtSlug = songTitle.toLowerCase()
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '');
-
-  return {
-    cifraclub: {
-      url: slug ? `https://www.cifraclub.com.br/queen/${slug}/` : null,
-      searchUrl: searchUrl,
-      verified: !!slug
-    },
-    guitartuna: {
-      url: `https://guitartuna.com/chords/queen/${gtSlug}-chords`,
-      searchUrl: `https://www.google.com/search?q=site:guitartuna.com+queen+${encodeURIComponent(songTitle)}+chords`
-    }
-  };
-}
-
-function loadChordIframe(url, fallbackSearchUrl, guitartunaUrls) {
-  const iframe = document.getElementById('svIframe');
-  const loading = document.getElementById('svLoading');
-  const error = document.getElementById('svIframeError');
-  const errorText = document.getElementById('svIframeErrorText');
-
-  currentIframeUrl = url;
-
-  // Set fallback links
-  document.getElementById('svExternalLink').href = url || fallbackSearchUrl;
-  if (guitartunaUrls) {
-    document.getElementById('svGuitarTunaLink').href = guitartunaUrls.url;
-    document.getElementById('svGuitarTunaSearch').href = guitartunaUrls.searchUrl;
-  }
-
-  if (!url) {
-    // Not on Cifra Club (confirmed) - skip the iframe and show alternatives right away
-    loading.classList.add('hidden');
-    iframe.style.display = 'none';
-    iframe.src = '';
-    if (errorText) errorText.textContent = 'Esta canci\u00f3n no est\u00e1 disponible en Cifra Club.';
-    error.classList.add('active');
-    if (guitartunaUrls) openChordsInGuitarTuna(guitartunaUrls.url);
-    return;
-  }
-
-  // Show loading, hide error, reset iframe visibility
-  loading.classList.remove('hidden');
-  error.classList.remove('active');
-  iframe.style.display = '';
-
-  // Load iframe
-  iframe.src = url;
-
-  iframe.onload = function() {
-    loading.classList.add('hidden');
-  };
-
-  // Timeout: hide loading after 4s regardless
-  setTimeout(() => {
-    loading.classList.add('hidden');
-  }, 4000);
-}
-
-function openChordsPopup(url, sourceName) {
-  const screenW = window.screen.availWidth;
-  const screenH = window.screen.availHeight;
-  const popW = Math.floor(screenW * 0.48);
-  const popH = screenH;
-  const popX = screenW - popW;
-
-  if (chordsWindow && !chordsWindow.closed) {
-    chordsWindow.location.href = url;
-    chordsWindow.focus();
-  } else {
-    chordsWindow = window.open(url, 'queenChords',
-      `width=${popW},height=${popH},left=${popX},top=0,scrollbars=yes,resizable=yes`);
-  }
-}
-
-let gtWindow = null;
-function openChordsInGuitarTuna(url) {
-  // Open GuitarTuna in a popup positioned on the left side of the screen
-  const screenW = window.screen.availWidth;
-  const screenH = window.screen.availHeight;
-  const popW = Math.floor(screenW * 0.5);
-  const popH = screenH - 100;
-  const popX = 0;
-  const popY = 50;
-
-  if (gtWindow && !gtWindow.closed) {
-    gtWindow.location.href = url;
-    gtWindow.focus();
-  } else {
-    gtWindow = window.open(url, 'queenGT',
-      `width=${popW},height=${popH},left=${popX},top=${popY},scrollbars=yes,resizable=yes`);
-  }
-}
-
-function closeSongView() {
-  document.getElementById('songView').classList.remove('active');
-  document.body.style.overflow = '';
-  currentView = currentAlbum ? 'songs' : 'albums';
-
-  // Reset auto-scroll
-  resetAutoScroll();
-
-  // Stop chord iframe
-  document.getElementById('svIframe').src = '';
-  currentVideoId = '';
-  currentVideoTitle = '';
-
-  // Minimize and blank YouTube/GuitarTuna popup windows
-  // (Chrome blocks window.close() after user interaction, so we blank + minimize instead)
-  try {
-    if (btWindow && !btWindow.closed) {
-      btWindow.location.href = 'about:blank';
-      btWindow.resizeTo(1, 1);
-      btWindow.moveTo(-100, -100);
-    }
-  } catch(e) {}
-  try {
-    if (gtWindow && !gtWindow.closed) {
-      gtWindow.location.href = 'about:blank';
-      gtWindow.resizeTo(1, 1);
-      gtWindow.moveTo(-100, -100);
-    }
-  } catch(e) {}
-
-  if (currentAlbum) {
-    document.getElementById('breadcrumb').innerHTML =
-      `<span onclick="renderAlbums()">Discografía</span><span class="sep">›</span><span class="current">${currentAlbum.name}</span>`;
-  }
-}
-
-function extractVideoId(url) {
-  const patterns = [
-    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/,
-    /^([a-zA-Z0-9_-]{11})$/
-  ];
-  for (const pattern of patterns) {
-    const match = url.match(pattern);
-    if (match) return match[1];
-  }
-  return '';
-}
-
-// ===== BACKING TRACK PANEL =====
-function toggleBtPanel() {
-  const panel = document.getElementById('svBtPanel');
-  panel.classList.toggle('hidden');
-}
-
-function toggleBtUrlInput() {
-  const section = document.getElementById('btUrlSection');
-  section.style.display = section.style.display === 'none' ? 'block' : 'none';
-}
-
-function searchBackingTrack() {
-  const query = document.getElementById('btSearchInput').value;
-  if (!query) return;
-  searchBackingTrackInPopup(query);
-}
-
-function searchBackingTrackInPopup(query) {
-  const url = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
-
-  // Open search results in the same popup window used for backing tracks
-  const popW = 675;
-  const popH = 820;
-  const screenW = window.screen.availWidth;
-  const screenH = window.screen.availHeight;
-  const popX = Math.round(screenW * 0.55) - 76;
-  const popY = Math.round((screenH - popH) / 2);
-
-  if (btWindow && !btWindow.closed) {
-    btWindow.resizeTo(popW, popH);
-    btWindow.moveTo(popX, popY);
-    btWindow.location.href = url;
-    btWindow.focus();
-  } else {
-    btWindow = window.open(url, 'queenBT',
-      `width=${popW},height=${popH},left=${popX},top=${popY},toolbar=no,menubar=no,resizable=yes,scrollbars=yes`);
-  }
-
-  document.getElementById('btPlayer').style.display = 'block';
-  document.getElementById('btNowPlaying').textContent = '🔍 Buscando en YouTube...';
-
-  document.getElementById('btResults').innerHTML = `
-    <div class="sv-bt-placeholder">
-      <div class="bt-icon" style="font-size:1.5em;">🎸🔍</div>
-      <p style="color:var(--gold);">Búsqueda abierta en la ventana de YouTube</p>
-      <p class="bt-hint">Elige el vídeo que prefieras y dale a reproducir directamente allí</p>
-      <button class="sv-yt-btn red" onclick="if(btWindow && !btWindow.closed) btWindow.focus();" style="margin-top:8px;">🔊 Ir a ventana de YouTube</button>
-    </div>`;
-}
-
-let btWindow = null;
-
-function loadBackingTrack() {
-  const urlInput = document.getElementById('btVideoUrl');
-  if (!urlInput) return;
-
-  const url = urlInput.value.trim();
-  const videoId = extractVideoId(url);
-
-  if (!videoId) {
-    alert('No se pudo reconocer el enlace de YouTube. Pega la URL completa del vídeo.');
-    return;
-  }
-
-  currentVideoId = videoId;
-  playBackingTrackVideo(videoId);
-}
-
-function playBackingTrackVideo(videoId) {
-  const ytUrl = `https://www.youtube.com/watch?v=${videoId}`;
-
-  // Popup positioned center-right, 25% narrower
-  const popW = 675;
-  const popH = 820;
-  const screenW = window.screen.availWidth;
-  const screenH = window.screen.availHeight;
-  const popX = Math.round(screenW * 0.55) - 76;
-  const popY = Math.round((screenH - popH) / 2);
-
-  if (btWindow && !btWindow.closed) {
-    btWindow.resizeTo(popW, popH);
-    btWindow.moveTo(popX, popY);
-    btWindow.location.href = ytUrl;
-    btWindow.focus();
-  } else {
-    btWindow = window.open(ytUrl, 'queenBT',
-      `width=${popW},height=${popH},left=${popX},top=${popY},toolbar=no,menubar=no,resizable=yes,scrollbars=no`);
-  }
-
-  document.getElementById('btPlayer').style.display = 'block';
-  document.getElementById('btNowPlaying').textContent = '▶ Reproduciéndose en ventana externa';
-  document.getElementById('btResults').innerHTML = `
-    <div class="sv-bt-placeholder">
-      <div class="bt-icon" style="font-size:1.5em;">🎸🎵</div>
-      <p style="color:var(--gold);">¡A tocar! La backing track suena en la ventana de YouTube.</p>
-      <p class="bt-hint">Sigue los acordes de la izquierda mientras tocas</p>
-      <button class="sv-yt-btn red" onclick="if(btWindow && !btWindow.closed) btWindow.focus();" style="margin-top:8px;">🔊 Ir a ventana de YouTube</button>
-    </div>`;
-}
-
-function goBack() {
-  if (currentView === 'songs') {
-    renderAlbums();
-  } else if (currentView === 'song') {
-    closeSongView();
-  }
-}
-
-function filterAlbums(query) {
-  query = query.toLowerCase().trim();
-  const allCards = document.querySelectorAll('.album-card');
-  const allAlbums = [...DISCOGRAPHY.studio, ...DISCOGRAPHY.live];
-  let studioVisible = 0, liveVisible = 0;
-
-  allCards.forEach((card, index) => {
-    const album = allAlbums[index];
-    const matchAlbum = album.name.toLowerCase().includes(query);
-    const matchSong = album.tracks.some(t => t.title.toLowerCase().includes(query));
-    const matchYear = album.year.toString().includes(query);
-    const visible = !query || matchAlbum || matchSong || matchYear;
-
-    card.style.display = visible ? '' : 'none';
-
-    if (visible) {
-      if (index < DISCOGRAPHY.studio.length) studioVisible++;
-      else liveVisible++;
-    }
-  });
-
-  // Hide section headers if no results
-  const studioSection = document.getElementById('studioSection');
-  const liveSection = document.getElementById('liveSection');
-  if (studioSection) studioSection.style.display = studioVisible > 0 ? '' : 'none';
-  if (liveSection) liveSection.style.display = liveVisible > 0 ? '' : 'none';
-}
-
-function calculateTotalDuration(tracks) {
-  let totalSeconds = 0;
-  tracks.forEach(t => {
-    const parts = t.duration.split(':');
-    totalSeconds += parseInt(parts[0]) * 60 + parseInt(parts[1]);
-  });
-  const hours = Math.floor(totalSeconds / 3600);
-  const mins = Math.floor((totalSeconds % 3600) / 60);
-  return hours > 0 ? `${hours}h ${mins}min` : `${mins} min`;
-}
-
-// Keyboard shortcuts
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    if (currentView === 'song') closeSongView();
-    else if (currentView === 'songs') renderAlbums();
-  }
-});
-
-// ===== ALBUM ART (Cover Art Archive - MusicBrainz) =====
-// Using release-group IDs for direct image URLs (no API/CORS needed)
-const ALBUM_ART = {
-  "queen-1973": "https://coverartarchive.org/release-group/810068af-2b3c-3e9c-b2ab-68a3f3e3787d/front-500",
-  "queen-ii-1974": "https://coverartarchive.org/release-group/93d91bd6-1b55-3751-bca7-8b9d33beb7ef/front-500",
-  "sheer-heart-attack-1974": "https://coverartarchive.org/release-group/002ed683-3327-3df0-88c8-318746089925/front-500",
-  "a-night-at-the-opera-1975": "https://coverartarchive.org/release-group/6b47c9a0-b9e1-3df9-a5e8-50a6ce0dbdbd/front-500",
-  "a-day-at-the-races-1976": "https://coverartarchive.org/release-group/a106e33b-e440-3ff3-9250-c6408ed73e60/front-500",
-  "news-of-the-world-1977": "https://coverartarchive.org/release-group/c172ea98-3a82-3254-b8ad-25a4f465ba03/front-500",
-  "jazz-1978": "https://coverartarchive.org/release-group/c192ea46-7377-34f0-b332-dd9810edd560/front-500",
-  "the-game-1980": "https://coverartarchive.org/release-group/75702ddf-a46c-3cac-bace-0a466eb3c37c/front-500",
-  "flash-gordon-1980": "https://coverartarchive.org/release-group/70bd9521-c3ea-38c9-9d67-a6a6100bfa48/front-500",
-  "hot-space-1982": "https://coverartarchive.org/release-group/3918b90b-340e-3779-9d7e-ba1593653498/front-500",
-  "the-works-1984": "https://coverartarchive.org/release-group/44c90c72-76b5-3c13-890e-3d37f21c10c9/front-500",
-  "a-kind-of-magic-1986": "https://coverartarchive.org/release-group/f878e548-3501-437f-8fab-884a36ec6abe/front-500",
-  "the-miracle-1989": "https://coverartarchive.org/release-group/b3d2bd3e-0698-3b9a-ad65-754457cd7898/front-500",
-  "innuendo-1991": "https://coverartarchive.org/release-group/daf57856-a734-3441-b0fd-26aa5f28ca64/front-500",
-  "made-in-heaven-1995": "https://coverartarchive.org/release-group/780e6a16-9384-307d-ae65-02e1d6313753/front-500",
-  "live-killers-1979": "https://coverartarchive.org/release-group/c8425a2f-c6fd-3656-aeda-162bf996b622/front-500",
-  "live-magic-1986": "https://coverartarchive.org/release-group/c88dba71-c542-3424-b746-05f6c8f3e060/front-500",
-  "live-at-wembley-1992": "https://coverartarchive.org/release-group/372f535d-a06d-35f4-a171-5f63e27c3f8d/front-500",
-  "queen-on-fire-2004": "https://coverartarchive.org/release-group/c9a223e1-377f-363f-9699-4d209006a2b7/front-500",
-  "queen-rock-montreal-2007": "https://coverartarchive.org/release-group/e0d97e8d-dc9e-3f1b-91a4-ec7df83eecb1/front-500",
-  "hungarian-rhapsody-2012": "https://coverartarchive.org/release-group/4ffec0b4-26c6-4e6c-82a0-40d0be080c9f/front-500"
-};
-
-const albumArtCache = {};
-
 // ===== BACKING TRACKS DATABASE (YouTube video IDs) =====
 // Pre-searched backing tracks without guitar for popular Queen songs
 const BACKING_TRACKS = {
@@ -2245,8 +1117,422 @@ const BACKING_TRACKS = {
   "Now I'm Here": "lj-wpwpQRRI"
 };
 
-// ===== INIT =====
-renderAlbums();
+// ===== HELPERS =====
+const ALL_ALBUMS = [...DISCOGRAPHY.studio, ...DISCOGRAPHY.live];
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const isLive = album => DISCOGRAPHY.live.includes(album);
+const findAlbum = id => ALL_ALBUMS.find(a => a.id === id);
+const songHref = (album, i) => `#/disco/${album.id}/${i}`;
+const albumHref = album => `#/disco/${album.id}`;
+const fold = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/['’.,!?()]/g, '');
+
+const store = {
+  get(key) { try { return localStorage.getItem('qgp.' + key); } catch { return null; } },
+  set(key, value) { try { localStorage.setItem('qgp.' + key, value); } catch {} },
+  remove(key) { try { localStorage.removeItem('qgp.' + key); } catch {} }
+};
+
+function totalDuration(tracks) {
+  const secs = tracks.reduce((sum, t) => {
+    const [m, s] = t.duration.split(':').map(Number);
+    return sum + m * 60 + s;
+  }, 0);
+  const h = Math.floor(secs / 3600), m = Math.round((secs % 3600) / 60);
+  return h ? `${h} h ${m} min` : `${m} min`;
+}
+
+function trackKey(album, title) { return 'track.' + (isLive(album) ? album.id + '/' : '') + title; }
+function savedTrack(album, title) { return store.get(trackKey(album, title)); }
+function defaultTrack(album, title) { return isLive(album) ? null : (BACKING_TRACKS[title] || null); }
+function currentTrackId(album, title) { return savedTrack(album, title) || defaultTrack(album, title); }
+
+function sleeve(album) {
+  return `<div class="sleeve">
+    <div class="sleeve__fallback" style="background:${album.gradient}">${esc(album.name)}</div>
+    <img src="covers/${album.id}.jpg" alt="" width="500" height="500" loading="lazy" decoding="async" onerror="this.remove()">
+  </div>`;
+}
+
+function recordCard(album) {
+  return `<li><a class="record" href="${albumHref(album)}">
+    ${sleeve(album)}
+    <div class="record__title">${esc(album.name)}</div>
+    <div class="record__year">${album.year}</div>
+  </a></li>`;
+}
+
+function trackTags(album, title) {
+  let tags = '';
+  if (currentTrackId(album, title)) tags += '<span class="tag tag--track">Pista</span>';
+  if (CIFRA_SLUGS[title]) tags += '<span class="tag">Acordes</span>';
+  return tags;
+}
+
+function trackRow(album, i, withAlbum) {
+  const t = album.tracks[i];
+  const sub = withAlbum ? `<span class="track__sub">${esc(album.name)}, ${album.year}</span>` : '';
+  return `<li><a class="track" href="${songHref(album, i)}">
+    <span class="track__n">${withAlbum ? '' : i + 1}</span>
+    <span class="track__title">${esc(t.title)}${sub}</span>
+    <span class="track__tags">${trackTags(album, t.title)}</span>
+    <span class="track__time">${t.duration}</span>
+  </a></li>`;
+}
+
+const LEGEND = `<div class="legend">
+  <span><span class="tag tag--track">Pista</span> pista sin guitarra lista para tocar</span>
+  <span><span class="tag">Acordes</span> disponibles en Cifra Club</span>
+</div>`;
+
+// ===== PAGES =====
+let pageKey = '';
+let query = '';
+
+function setPage(key, html) {
+  if (pageKey === key) return;
+  const sameView = pageKey.split(':')[0] === key.split(':')[0];
+  pageKey = key;
+  $('page').innerHTML = html;
+  if (!sameView || !key.startsWith('search')) window.scrollTo(0, 0);
+}
+
+function renderHome() {
+  const studio = DISCOGRAPHY.studio, live = DISCOGRAPHY.live;
+  setPage('home', `
+    <section class="intro">
+      <h1>Toca con Queen.</h1>
+      <p>Elige un disco y una canción: los acordes y la pista sin guitarra aparecen juntos en la misma pantalla.</p>
+    </section>
+    <section class="shelf">
+      <div class="shelf__head"><h2>Estudio</h2><span>${studio.length} discos, ${studio[0].year} a ${studio[studio.length - 1].year}</span></div>
+      <ul class="records">${studio.map(recordCard).join('')}</ul>
+    </section>
+    <section class="shelf">
+      <div class="shelf__head"><h2>En directo</h2><span>${live.length} discos</span></div>
+      <ul class="records">${live.map(recordCard).join('')}</ul>
+    </section>`);
+}
+
+function renderSearch(q) {
+  const needle = fold(q.trim());
+  const albums = ALL_ALBUMS.filter(a => fold(a.name).includes(needle) || String(a.year) === needle);
+  const songs = [];
+  const seen = new Set();
+  for (const album of ALL_ALBUMS) {
+    album.tracks.forEach((t, i) => {
+      if (!fold(t.title).includes(needle)) return;
+      const key = t.title + (isLive(album) ? album.id : '');
+      if (seen.has(key)) return;
+      seen.add(key);
+      songs.push([album, i]);
+    });
+  }
+  songs.sort(([a, i], [b, j]) => isLive(a) - isLive(b));
+
+  let html = `<section class="results">
+    <h1>Resultados para “${esc(q.trim())}”</h1>
+    <p>${songs.length} ${songs.length === 1 ? 'canción' : 'canciones'} y ${albums.length} ${albums.length === 1 ? 'disco' : 'discos'}</p>`;
+  if (!songs.length && !albums.length) {
+    html += `<p class="empty">No hay nada con ese nombre. Prueba con una parte del título, por ejemplo “rhapsody” o “magic”.</p>`;
+  }
+  if (songs.length) {
+    html += `<h2>Canciones</h2>${LEGEND}<ul class="tracks">${songs.slice(0, 60).map(([a, i]) => trackRow(a, i, true)).join('')}</ul>`;
+  }
+  if (albums.length) {
+    html += `<h2>Discos</h2><ul class="records">${albums.map(recordCard).join('')}</ul>`;
+  }
+  html += `</section>`;
+  setPage('search:' + needle, html);
+}
+
+function renderAlbum(album) {
+  const kind = isLive(album) ? 'en directo' : 'estudio';
+  const q = encodeURIComponent('Queen ' + album.name);
+  setPage('album:' + album.id, `
+    <a class="back" href="#/"><svg class="icon" style="width:16px;height:16px"><use href="#i-back"/></svg> Discografía</a>
+    <div class="album">
+      <div class="album__art">${sleeve(album)}</div>
+      <div>
+        <h1>${esc(album.name)}</h1>
+        <p class="album__meta">${album.year}, ${kind}, ${album.tracks.length} canciones, ${totalDuration(album.tracks)}</p>
+        <div class="album__listen">
+          <a class="btn" href="https://www.youtube.com/results?search_query=${q}+full+album" target="_blank" rel="noopener">Escuchar en YouTube</a>
+          <a class="btn" href="https://open.spotify.com/search/${q}" target="_blank" rel="noopener">Escuchar en Spotify</a>
+        </div>
+        ${LEGEND}
+        <ol class="tracks">${album.tracks.map((_, i) => trackRow(album, i, false)).join('')}</ol>
+      </div>
+    </div>`);
+}
+
+// ===== PRACTICE ROOM =====
+let room = null; // { album, index }
+
+function backingQuery(album, title) {
+  return isLive(album)
+    ? `Queen ${title} live ${album.name.replace(/^(Live |Queen )/, '')} backing track no guitar`
+    : `Queen ${title} backing track no guitar`;
+}
+
+function openRoom(album, index) {
+  const track = album.tracks[index];
+  const title = track.title;
+  const same = room && room.album === album && room.index === index;
+  room = { album, index };
+
+  $('roomTitle').textContent = title;
+  $('roomSub').textContent = `${album.name}, ${album.year}. Canción ${index + 1} de ${album.tracks.length}`;
+  $('roomClose').href = albumHref(album);
+
+  const prev = $('roomPrev'), next = $('roomNext');
+  prev.href = index > 0 ? songHref(album, index - 1) : albumHref(album);
+  next.href = index < album.tracks.length - 1 ? songHref(album, index + 1) : albumHref(album);
+  prev.toggleAttribute('aria-disabled', index === 0);
+  next.toggleAttribute('aria-disabled', index === album.tracks.length - 1);
+  prev.style.visibility = index === 0 ? 'hidden' : '';
+  next.style.visibility = index === album.tracks.length - 1 ? 'hidden' : '';
+  prev.title = index > 0 ? 'Anterior: ' + album.tracks[index - 1].title : '';
+  next.title = index < album.tracks.length - 1 ? 'Siguiente: ' + album.tracks[index + 1].title : '';
+
+  const chordsQuery = encodeURIComponent(`Queen ${title}`);
+  const ug = `https://www.ultimate-guitar.com/search.php?search_type=title&value=${chordsQuery}`;
+  const google = `https://www.google.com/search?q=${encodeURIComponent(`Queen ${title} acordes guitarra`)}`;
+  $('missingUG').href = $('otherUG').href = ug;
+  $('missingGoogle').href = $('otherGoogle').href = google;
+  $('ytSearch').href = `https://www.youtube.com/results?search_query=${encodeURIComponent(backingQuery(album, title))}`;
+  $('trackUrl').value = '';
+  $('trackError').hidden = true;
+
+  $('room').hidden = false;
+  document.body.classList.add('locked');
+
+  if (!same) {
+    loadChart(title);
+    stopScroll();
+    $('chart').scrollTop = 0;
+    scrollState.pos = 0;
+    setSpeed(Number(store.get('speed.' + title)) || 3, false);
+    showTrack();
+  }
+  $('roomClose').focus({ preventScroll: true });
+}
+
+function closeRoom() {
+  if ($('room').hidden) return;
+  $('room').hidden = true;
+  document.body.classList.remove('locked');
+  stopScroll();
+  if (player && player.stopVideo) player.stopVideo();
+  $('chartFrame').removeAttribute('src');
+  room = null;
+}
+
+// ----- Chords (Cifra Club) -----
+function loadChart(title) {
+  const slug = CIFRA_SLUGS[title];
+  const frame = $('chartFrame');
+  const cifra = $('roomCifra');
+  cifra.hidden = !slug;
+  $('scrollToggle').disabled = !slug;
+  if (!slug) {
+    frame.removeAttribute('src');
+    frame.hidden = true;
+    $('chartLoading').hidden = true;
+    $('chartMissing').hidden = false;
+    return;
+  }
+  const url = `https://www.cifraclub.com.br/queen/${slug}/`;
+  cifra.href = url;
+  $('chartMissing').hidden = true;
+  $('chartLoading').hidden = false;
+  frame.hidden = false;
+  frame.onload = () => { $('chartLoading').hidden = true; };
+  frame.src = url;
+  setTimeout(() => { if (frame.src === url) $('chartLoading').hidden = true; }, 8000);
+}
+
+// ----- Auto-scroll -----
+const scrollState = { on: false, speed: 3, pos: 0, last: 0, timer: 0 };
+const pxPerSecond = s => (0.03 + (s - 1) * 0.05) * (1000 / 30);
+
+function scrollStep() {
+  const chart = $('chart');
+  const now = performance.now();
+  const dt = Math.min(now - scrollState.last, 100) / 1000;
+  scrollState.last = now;
+  if (Math.abs(chart.scrollTop - scrollState.pos) > 2) scrollState.pos = chart.scrollTop;
+  scrollState.pos += pxPerSecond(scrollState.speed) * dt;
+  chart.scrollTop = scrollState.pos;
+}
+
+function startScroll() {
+  if (scrollState.on || $('chartFrame').hidden) return;
+  scrollState.on = true;
+  scrollState.last = performance.now();
+  scrollState.pos = $('chart').scrollTop;
+  scrollState.timer = setInterval(scrollStep, 30);
+  $('scrollToggle').textContent = 'Pausar';
+}
+
+function stopScroll() {
+  scrollState.on = false;
+  clearInterval(scrollState.timer);
+  $('scrollToggle').textContent = 'Desplazar';
+}
+
+function setSpeed(value, remember = true) {
+  scrollState.speed = Math.max(1, Math.min(10, value));
+  $('speed').textContent = scrollState.speed;
+  $('speedDown').disabled = scrollState.speed === 1;
+  $('speedUp').disabled = scrollState.speed === 10;
+  if (remember && room) store.set('speed.' + room.album.tracks[room.index].title, scrollState.speed);
+}
+
+$('scrollToggle').addEventListener('click', () => scrollState.on ? stopScroll() : startScroll());
+$('speedDown').addEventListener('click', () => setSpeed(scrollState.speed - 1));
+$('speedUp').addEventListener('click', () => setSpeed(scrollState.speed + 1));
+$('syncScroll').checked = store.get('sync') !== '0';
+$('syncScroll').addEventListener('change', e => store.set('sync', e.target.checked ? '1' : '0'));
+
+// ----- Backing track (YouTube) -----
+let player = null;
+let ytApi = null;
+
+function loadYouTubeApi() {
+  if (!ytApi) {
+    ytApi = new Promise(resolve => {
+      window.onYouTubeIframeAPIReady = resolve;
+      const s = document.createElement('script');
+      s.src = 'https://www.youtube.com/iframe_api';
+      document.head.appendChild(s);
+    });
+  }
+  return ytApi;
+}
+
+function onPlayerState(e) {
+  if (!$('syncScroll').checked) return;
+  if (e.data === YT.PlayerState.PLAYING) startScroll();
+  else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) stopScroll();
+}
+
+function setPlayerVisible(visible, emptyText) {
+  $('playerEmpty').hidden = visible;
+  $('ytMount').style.visibility = visible ? '' : 'hidden';
+  if (emptyText) $('playerEmptyText').innerHTML = emptyText;
+}
+
+async function showTrack() {
+  const { album, index } = room;
+  const title = album.tracks[index].title;
+  const id = currentTrackId(album, title);
+  const saved = savedTrack(album, title);
+  const fallback = defaultTrack(album, title);
+
+  const note = $('trackNote');
+  if (saved) {
+    note.innerHTML = fallback
+      ? 'Pista elegida por ti. <button class="linkish" type="button" id="resetTrack">Volver a la pista original</button>'
+      : 'Pista elegida por ti. <button class="linkish" type="button" id="resetTrack">Quitarla</button>';
+    $('resetTrack').addEventListener('click', () => { store.remove(trackKey(album, title)); showTrack(); });
+  } else if (id) {
+    note.textContent = 'Dale a reproducir y toca encima. Los acordes se desplazan solos si tienes activado el desplazamiento.';
+  } else {
+    note.textContent = isLive(album)
+      ? 'Para los discos en directo no hay pista guardada: busca la versión de este concierto.'
+      : '';
+  }
+
+  if (player && player.stopVideo) player.stopVideo();
+
+  if (!id) {
+    setPlayerVisible(false, 'Busca una en YouTube y pega aquí abajo el enlace.');
+    return;
+  }
+
+  if (location.protocol === 'file:') {
+    setPlayerVisible(false, `YouTube solo se puede incrustar desde la web publicada. <a href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener">Abrir la pista en YouTube</a>`);
+    return;
+  }
+
+  const created = !playerReady;
+  const p = await ensurePlayer(id);
+  if (!room || currentTrackId(room.album, room.album.tracks[room.index].title) !== id) return;
+  if (!created) p.cueVideoById(id);
+  setPlayerVisible(true);
+}
+
+let playerReady = null;
+function ensurePlayer(firstId) {
+  if (!playerReady) {
+    playerReady = loadYouTubeApi().then(() => new Promise(resolve => {
+      player = new YT.Player('ytMount', {
+        host: 'https://www.youtube-nocookie.com',
+        videoId: firstId,
+        playerVars: { rel: 0, playsinline: 1, modestbranding: 1 },
+        events: { onReady: () => resolve(player), onStateChange: onPlayerState }
+      });
+    }));
+  }
+  return playerReady;
+}
+
+function extractVideoId(url) {
+  const m = url.trim().match(/(?:youtube(?:-nocookie)?\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([\w-]{11})/) || url.trim().match(/^([\w-]{11})$/);
+  return m ? m[1] : '';
+}
+
+$('moreToggle').addEventListener('click', () => {
+  const open = document.querySelector('.console').classList.toggle('show-more');
+  $('moreToggle').setAttribute('aria-expanded', open);
+});
+
+$('trackForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const id = extractVideoId($('trackUrl').value);
+  $('trackError').hidden = !!id;
+  if (!id || !room) return;
+  const title = room.album.tracks[room.index].title;
+  store.set(trackKey(room.album, title), id);
+  $('trackUrl').value = '';
+  showTrack();
+});
+
+// ===== ROUTER =====
+function route() {
+  const [section, albumId, indexStr] = location.hash.replace(/^#\/?/, '').split('/').map(decodeURIComponent);
+  const album = section === 'disco' ? findAlbum(albumId) : null;
+
+  if (album) {
+    if (query) { query = ''; $('search').value = ''; }
+    renderAlbum(album);
+    const index = Number(indexStr);
+    if (indexStr !== undefined && album.tracks[index]) openRoom(album, index);
+    else closeRoom();
+    return;
+  }
+
+  closeRoom();
+  if (query.trim()) renderSearch(query);
+  else renderHome();
+}
+
+$('search').addEventListener('input', e => {
+  query = e.target.value;
+  if (location.hash.startsWith('#/disco')) history.replaceState(null, '', '#/');
+  route();
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (!$('room').hidden) location.hash = $('roomClose').getAttribute('href');
+  else if (location.hash.startsWith('#/disco')) location.hash = '#/';
+  else if (query) { query = ''; $('search').value = ''; route(); }
+});
+
+window.addEventListener('hashchange', route);
+route();
 </script>
 </body>
 </html>
