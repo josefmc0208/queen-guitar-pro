@@ -215,6 +215,16 @@
   .strip__list { display: flex; flex-wrap: wrap; gap: 6px 4px; }
   .strip.collapsed .strip__list { display: none; }
   .strip.collapsed .strip__head { margin-bottom: 0; }
+  .chart-wrap { position: relative; display: grid; min-height: 0; }
+  .chart-wrap > .chart { grid-area: 1 / 1; }
+  .rail {
+    position: absolute; top: 0; bottom: 0; z-index: 2; overflow-y: auto;
+    display: grid; align-content: start; justify-content: center; gap: 14px 10px; padding: 18px 8px;
+  }
+  .rail__note { grid-column: 1 / -1; font-size: 12px; line-height: 1.4; color: var(--muted); text-align: center; }
+  .rail .chord { width: calc(62px * var(--d, 2)); }
+  .rail .chord b { font-size: calc(11px * var(--d, 2)); }
+  .rail .chord svg { width: calc(58px * var(--d, 2)); height: calc(68px * var(--d, 2)); margin-top: calc(3px * var(--d, 2)); }
   .chord { width: 62px; text-align: center; }
   .chord b { display: block; font-size: 13px; font-weight: 600; color: var(--gold-hi); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .chord svg { display: block; width: 58px; height: 68px; margin: 2px auto 0; overflow: visible; }
@@ -392,6 +402,9 @@
       <div class="strip__list" id="stripList"></div>
     </div>
 
+    <div class="chart-wrap">
+    <div class="rail" id="railL" aria-label="Diagramas de acordes" hidden></div>
+    <div class="rail" id="railR" aria-hidden="true" hidden></div>
     <div class="chart" id="chart">
       <div class="chart__state chart__state--loading" id="chartLoading">
         <div class="spinner" aria-hidden="true"></div>
@@ -408,6 +421,7 @@
       <div class="frame" id="frame">
         <iframe id="chartFrame" title="Acordes" sandbox="allow-scripts allow-forms allow-same-origin" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
+    </div>
     </div>
     </div>
 
@@ -1881,6 +1895,7 @@ function updateCrop() {
   iframe.style.top = -top * scale + 'px';
   iframe.style.transform = scale === 1 ? '' : `scale(${scale})`;
   Object.assign(frameState, { mode, scale, top, height });
+  layoutDiagrams();
 }
 new ResizeObserver(updateCrop).observe($('chart'));
 
@@ -1974,16 +1989,55 @@ function chordSvg(shape) {
   return s + '</svg>';
 }
 
+let diagrams = null; // { chords, capo } for the current song and view
+
+const chordFigure = ([name, shape]) =>
+  `<figure class="chord" title="${esc(name)}${shape ? ': ' + shape : ''}"><b>${esc(name)}</b>${chordSvg(shape)}</figure>`;
+
 function renderStrip(slug, view) {
-  const strip = $('strip');
   const data = slug && CHORD_DATA[slug] && CHORD_DATA[slug][view === 'simple' ? 's' : 'm'];
-  if (!data || view === 'letra' || !data.c.length) { strip.hidden = true; return; }
-  strip.hidden = false;
-  const n = data.c.length;
-  $('stripNote').textContent = `${n} ${n === 1 ? 'acorde' : 'acordes'} en orden de aparición` +
-    (data.capo ? `. Capo en el ${data.capo}: las posiciones son relativas al capo.` : '');
-  $('stripList').innerHTML = data.c.map(([name, shape]) =>
-    `<figure class="chord" title="${esc(name)}${shape ? ': ' + shape : ''}"><b>${esc(name)}</b>${chordSvg(shape)}</figure>`).join('');
+  diagrams = data && view !== 'letra' && data.c.length ? { chords: data.c, capo: data.capo } : null;
+  if (diagrams) {
+    const n = diagrams.chords.length;
+    $('stripNote').textContent = `${n} ${n === 1 ? 'acorde' : 'acordes'} en orden de aparición` +
+      (diagrams.capo ? `. Capo en el ${diagrams.capo}: las posiciones son relativas al capo.` : '');
+    $('stripList').innerHTML = diagrams.chords.map(chordFigure).join('');
+  }
+  layoutDiagrams();
+}
+
+// When the margins beside the sheet are wide enough, the diagrams move there, as large as fits
+// (up to twice the strip size), half on each side; otherwise they stay in the strip above.
+function layoutDiagrams() {
+  const strip = $('strip'), left = $('railL'), right = $('railR');
+  left.hidden = right.hidden = true;
+  if (!diagrams) { strip.hidden = true; return; }
+  const chart = $('chart');
+  const frameW = $('frame').hidden ? chart.clientWidth : $('frame').getBoundingClientRect().width;
+  const gutter = (chart.clientWidth - frameW) / 2 - 8;
+  const perSide = Math.ceil(diagrams.chords.length / 2);
+  const height = chart.clientHeight - 36 - (diagrams.capo ? 40 : 0);
+  let fit = null;
+  for (let d = 2; d >= 1.3; d -= 0.1) {
+    const cols = Math.floor((gutter - 16 + 10) / (62 * d + 10));
+    if (cols < 1) continue;
+    const rows = Math.ceil(perSide / cols);
+    fit = { d, cols };
+    if (rows * (68 * d + 14 * d + 14) <= height) break;
+  }
+  if (!fit) { strip.hidden = false; return; }
+  strip.hidden = true;
+  const sides = [[left, diagrams.chords.slice(0, perSide)], [right, diagrams.chords.slice(perSide)]];
+  for (const [rail, list] of sides) {
+    rail.style.setProperty('--d', fit.d.toFixed(2));
+    rail.style.width = gutter + 'px';
+    rail.style.gridTemplateColumns = `repeat(${fit.cols}, ${(62 * fit.d).toFixed(1)}px)`;
+    rail.innerHTML = list.map(chordFigure).join('');
+    rail.hidden = false;
+  }
+  if (diagrams.capo) left.insertAdjacentHTML('afterbegin', `<p class="rail__note">Capo en el ${esc(diagrams.capo)}: posiciones relativas al capo</p>`);
+  left.style.left = '0';
+  right.style.right = (chart.offsetWidth - chart.clientWidth) + 'px';
 }
 
 $('stripToggle').addEventListener('click', () => {
@@ -2048,16 +2102,17 @@ $('syncScroll').addEventListener('change', e => {
 // The chart position is a function of the track's playback time, so pausing, rewinding or
 // seeking keeps the text in step.
 //
-// Automatic mode (AUTO_SYNC): for studio songs we know when each verse is sung in the original
-// recording and where that verse sits in the Cifra Club sheet, so the current verse is kept at
-// 30% of the panel. A hand correction while the track plays is read as a time offset between
-// this video and the original recording, and shifts the whole song.
+// Automatic mode (AUTO_SYNC): we know when each verse is sung in the studio recording and where
+// that verse sits in the Cifra Club sheet, so the current verse is kept at 30% of the panel.
+// The video's time t maps to recording time u = k * (t - b). Live versions start from k = studio
+// length / live length. Hand corrections while the track plays are (t, u) pairs: one sets the
+// offset b, two or more spread over the song also fit the tempo k.
 //
 // Manual mode (no AUTO_SYNC data): a hand correction is stored as a (time, position) anchor
 // and the curve passes through it from then on.
 //
 // Both are stored per video, song and view, since each changes the timing or the layout.
-const follow = { timer: 0, lastSet: -1, userAt: 0, userActive: false, key: '', auto: null, offset: 0, anchors: [], clock: { t: -1, at: 0 } };
+const follow = { timer: 0, lastSet: -1, userAt: 0, userActive: false, key: '', auto: null, k0: 1, k: 1, b: 0, corr: [], anchors: [], clock: { t: -1, at: 0 } };
 
 function followKey() {
   if (!room) return '';
@@ -2068,7 +2123,7 @@ function followKey() {
 }
 
 function autoData() {
-  if (!room || isLive(room.album) || room.view !== 'main' || frameState.mode !== 'print') return null;
+  if (!room || room.view !== 'main' || frameState.mode !== 'print') return null;
   const slug = CIFRA_SLUGS[room.album.tracks[room.index].title];
   const data = slug && AUTO_SYNC[slug];
   return data || null;
@@ -2077,16 +2132,50 @@ function autoData() {
 function loadAnchors() {
   follow.key = followKey();
   follow.auto = follow.key ? autoData() : null;
-  follow.offset = Number(store.get('syncoff.' + follow.key)) || 0;
-  try { follow.anchors = follow.key ? JSON.parse(store.get('sync.' + follow.key) || '[]') : []; } catch { follow.anchors = []; }
+  follow.k0 = 1;
+  if (follow.auto && isLive(room.album)) {
+    const [m, s] = room.album.tracks[room.index].duration.split(':').map(Number);
+    const live = m * 60 + s;
+    if (live > 30) follow.k0 = Math.min(1.3, Math.max(0.75, follow.auto.end[0] / live));
+  }
+  const read = key => { try { return JSON.parse(store.get(key) || '[]'); } catch { return []; } };
+  follow.corr = follow.key ? read('synccorr.' + follow.key) : [];
+  follow.anchors = follow.key ? read('sync.' + follow.key) : [];
+  fitTiming();
   renderSyncNote();
 }
 
 function saveSync() {
   if (!follow.key) return;
-  if (follow.offset) store.set('syncoff.' + follow.key, follow.offset.toFixed(2)); else store.remove('syncoff.' + follow.key);
+  if (follow.corr.length) store.set('synccorr.' + follow.key, JSON.stringify(follow.corr)); else store.remove('synccorr.' + follow.key);
   if (follow.anchors.length) store.set('sync.' + follow.key, JSON.stringify(follow.anchors)); else store.remove('sync.' + follow.key);
   renderSyncNote();
+}
+
+// u = k * (t - b) from the corrections: none = default tempo, one = offset only, two or more
+// at least 20 s apart = least-squares fit of tempo and offset.
+function fitTiming() {
+  const c = follow.corr;
+  let k = follow.k0, b = 0;
+  if (c.length === 1 || (c.length > 1 && Math.max(...c.map(p => p[0])) - Math.min(...c.map(p => p[0])) < 20)) {
+    const [t, u] = c[c.length - 1];
+    b = t - u / k;
+  } else if (c.length > 1) {
+    const n = c.length, mt = c.reduce((s, p) => s + p[0], 0) / n, mu = c.reduce((s, p) => s + p[1], 0) / n;
+    const sxx = c.reduce((s, p) => s + (p[0] - mt) ** 2, 0), sxy = c.reduce((s, p) => s + (p[0] - mt) * (p[1] - mu), 0);
+    k = Math.min(1.4, Math.max(0.7, sxy / sxx));
+    b = mt - mu / k;
+  }
+  follow.k = k;
+  follow.b = b;
+}
+
+function addCorrection(t, u) {
+  follow.corr = follow.corr.filter(([ct]) => Math.abs(ct - t) > 5).slice(-5);
+  follow.corr.push([Math.round(t * 10) / 10, Math.round(u * 10) / 10]);
+  follow.corr.sort((a, b) => a[0] - b[0]);
+  fitTiming();
+  saveSync();
 }
 
 function addAnchor(t, y) {
@@ -2120,7 +2209,7 @@ function autoPoints() {
 function curve(t) {
   if (follow.auto) {
     const pts = autoPoints();
-    const y = linear(pts, t - follow.offset);
+    const y = linear(pts, follow.k * (t - follow.b));
     return y === null ? pts[pts.length - 1][1] : y;
   }
   const pts = follow.anchors.length && follow.anchors[0][0] <= 0.5 ? follow.anchors : [[0, 0], ...follow.anchors];
@@ -2157,8 +2246,7 @@ function followStep() {
     if (performance.now() - follow.userAt < 1200) return;
     follow.userActive = false;
     if (follow.auto) {
-      follow.offset = Math.round((t - autoTimeAt(chart.scrollTop)) * 10) / 10;
-      saveSync();
+      addCorrection(t, autoTimeAt(chart.scrollTop));
     } else {
       addAnchor(t, chart.scrollTop);
     }
@@ -2196,10 +2284,16 @@ function renderSyncNote() {
   const note = $('syncNote');
   if (!follow.key) { note.textContent = ''; return; }
   if (follow.auto) {
-    const shift = follow.offset
-      ? ` Ajustada ${follow.offset > 0 ? '+' : ''}${follow.offset.toFixed(1).replace('.', ',')} s a este vídeo. <button class="linkish" type="button" id="syncReset">Quitar ajuste</button>`
-      : ' Si va adelantada o atrasada, colócala con la rueda del ratón mientras suena y se ajustará toda la canción.';
-    note.innerHTML = `Sincronizada verso a verso con la grabación original.${shift}`;
+    const live = isLive(room.album);
+    const base = live
+      ? 'Sincronizada con los versos de la versión de estudio, ajustada a la duración de este directo.'
+      : 'Sincronizada verso a verso con la grabación original.';
+    const n = follow.corr.length;
+    const tempo = Math.abs(follow.k - 1) >= 0.005 ? `, tempo del vídeo ${Math.round(100 * follow.k)} %` : '';
+    const shift = n
+      ? ` Ajustada a este vídeo (${n} ${n === 1 ? 'corrección' : 'correcciones'}${tempo}). Si aún se desvía, vuelve a colocarla más adelante en la canción. <button class="linkish" type="button" id="syncReset">Quitar ajustes</button>`
+      : ` Si va adelantada o atrasada, colócala con la rueda mientras suena${live ? '; con dos correcciones separadas se ajusta también el tempo' : ''}.`;
+    note.innerHTML = base + shift;
   } else if (follow.anchors.length) {
     const n = follow.anchors.length;
     note.innerHTML = `Sincronizada con esta pista (${n} ${n === 1 ? 'ajuste' : 'ajustes'}). <button class="linkish" type="button" id="syncReset">Borrar ajustes</button>`;
@@ -2208,7 +2302,7 @@ function renderSyncNote() {
     return;
   }
   const reset = $('syncReset');
-  if (reset) reset.addEventListener('click', () => { follow.offset = 0; follow.anchors = []; saveSync(); });
+  if (reset) reset.addEventListener('click', () => { follow.corr = []; follow.anchors = []; fitTiming(); saveSync(); });
 }
 
 // ----- Backing track (YouTube) -----
